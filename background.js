@@ -1,12 +1,4 @@
-// window.addEventListener('load', function() {
-//   if (window.Notification && Notification.permission !== "granted") {
-//     Notification.requestPermission(function (status) {
-//       if (Notification.permission !== status) {
-//         Notification.permission = status;
-//       }
-//     });
-//   }
-// });
+
 
 
   function renderMessage() {
@@ -19,29 +11,24 @@
     }
 
   function displayMessage() {
-    console.log('hi');
     var title = 'Your PostureMinder';
     var messageBody = renderMessage();
-    if (window.Notification && Notification.permission === "granted") {
-      var n = new Notification("Hi!");
-    } else if (window.Notification && Notification.permission !== "denied") {
-      Notification.requestPermission(function (status) {
-        if (Notification.permission !== status) {
-          Notification.permission = status;
-        }
+    Notification.requestPermission(function(permission){
+      var notification = new Notification(title, {
+        body: messageBody
       });
-
-        if (status === "granted") {
-          var n = new Notification("Hi!");
-        }
-      }
-
-
-
-
+      setTimeout(function(){
+        notification.close();
+      },2000);
+    });
   }
 
-  $('#message').click( function(e) {
-    console.log('clicked');
+
+
+
+
+  $('#message').click(function() {
     displayMessage();
   });
+
+
