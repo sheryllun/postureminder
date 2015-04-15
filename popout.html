@@ -3,14 +3,34 @@
   <style>
     body {
       font-family: 'Arial';
-      font-size: 14px;
+      font-size: 62.5%;
+    }
+
+    img {
+      float: left;
+      margin-right: 10px;
+    }
+
+    header p {
+      font-size: 1.8em;
+    }
+
+    .tagline {
+      display: block;
+      font-style: italic;
+      font-size: 1.2em;
     }
 
   </style>
   </head>
 
   <body>
-    <div id="error"></div>
+    <header>
+      <img src="img/spine.png" height="40" width="40">
+      <p>PostureMinder</p>
+      <span class="tagline">Snarky reminders to improve your posture.</span>
+    </header>
+    <div id="notification">Reminders are currently enabled.</div>
     
     <button id="message">Click me.</button>
   </body>

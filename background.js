@@ -1,4 +1,8 @@
-
+window.addEventListener('load', function() {
+  if(!('Notification' in window)) {
+    $('#notification').text('Sorry, your browser does not support the Web Notifications API.');
+  } else console.log('Web Notifications API supported');
+});
 
 
   function renderMessage() {
@@ -13,17 +17,35 @@
   function displayMessage() {
     var title = 'Your PostureMinder';
     var messageBody = renderMessage();
-    Notification.requestPermission(function(permission){
+
+    if(Notification.permission === "granted") {
       var notification = new Notification(title, {
-        body: messageBody
+        body: messageBody,
+        icon: 'img/spine.png'
       });
       setTimeout(function(){
         notification.close();
-      },2000);
-    });
+      },5000);
+
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission(function(permission){
+
+        if(permission === 'granted')  {
+          var notification = new Notification(title, {
+                  body: messageBody,
+                  icon: 'img/spine.png'
+                });
+                setTimeout(function(){
+                  notification.close();
+                },5000);
+
+          } else {
+            $('#notification').text('Desktop notifications must be activated in order for this extension to run.');
+            return;
+          }
+      });
+    }
   }
-
-
 
 
 
