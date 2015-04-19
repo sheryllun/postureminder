@@ -100,7 +100,7 @@
       <span class="tagline">Regular reminders to improve your posture.</span>
     </header>
     <hr>
-    <div id="notification">Reminders are currently enabled.</div>
+    <div id="notification">Reminders are currently <strong>enabled</strong>.</div>
     <div class="options">
       <h2>Options</h2>
       <form action="">
@@ -110,18 +110,21 @@
             <input type="radio" name="default" value="1" checked>Enable<br>
             <input type="radio" name="default" value="0">Disable
           </li>
+
           <li>
             <label for="time">Time between reminders:</label>
             <input type="number" name="time" value="5" max="3" id="time"> minutes
           </li>
+
           <li>
             <label for="close">Closing Reminders:</label>
             <input type="radio" name="close" value="1" checked>Timed Close: Reminders will fade after 5 seconds.<br>
             <input type="radio" name="close" value="2">Click Close: Reminders will stay on screen until user clicks on it.
           </li>
+
           <li>
            <label for="walk"> Walk Around Reminders: <span class="remark">An additional reminder will pop up every 60 minutes reminding you to get up and walk around.</span></label>
-            <input type="checkbox" name="walk"> Enable
+            <input type="checkbox" name="walk" id="walk"> Enable
           </li>
         </ul>
         <input type="submit" value="Update" id="submit">
