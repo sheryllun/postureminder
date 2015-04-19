@@ -4,6 +4,9 @@
     body {
       font-family: 'Arial';
       font-size: 62.5%;
+      text-align: center;
+      margin: 0;
+
     }
 
     img {
@@ -11,14 +14,80 @@
       margin-right: 10px;
     }
 
+    header {
+      width: 300px;
+      margin: 15px auto;
+    }
+
     header p {
       font-size: 1.8em;
+      margin-bottom: 3px;
     }
 
     .tagline {
       display: block;
       font-style: italic;
       font-size: 1.2em;
+    }
+
+    hr {
+      background-color: #D8D8D8;
+      border: none;
+      height: 1px;
+    }
+
+    #notification {
+      margin-top: 10px;
+      font-size: 1.4em;
+      padding: 5px;
+      background: #B7EDE8;
+      font-style: italic;
+      color: #465E5A;
+    }
+
+    .options {
+      padding: 20px;
+    }
+
+    .options ul {
+      text-align: left;
+      list-style-type: none;
+      font-size: 1.4em;
+      padding: 0;
+    }
+
+    .options li {
+      margin-bottom: 15px;
+    }
+
+    .options label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    #time {
+      width: 50px;
+    }
+
+    .remark {
+      font-size: .9em;
+      font-weight: normal;
+      font-style: italic;
+    }
+
+    #submit {
+      background: #B7EDE8;
+      color: #000;
+      font-weight: bold;
+      padding: 10px 25px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #submit:hover {
+      background: #5AD7CF;
     }
 
   </style>
@@ -28,9 +97,36 @@
     <header>
       <img src="img/spine.png" height="40" width="40">
       <p>PostureMinder</p>
-      <span class="tagline">Snarky reminders to improve your posture.</span>
+      <span class="tagline">Regular reminders to improve your posture.</span>
     </header>
+    <hr>
     <div id="notification">Reminders are currently enabled.</div>
+    <div class="options">
+      <h2>Options</h2>
+      <form action="">
+        <ul>
+          <li>
+            <label for="default">Enable/Disable Reminders: <span class="remark">Disabling reminders disables the entire application.</span></label>
+            <input type="radio" name="default" value="1" checked>Enable<br>
+            <input type="radio" name="default" value="0">Disable
+          </li>
+          <li>
+            <label for="time">Time between reminders:</label>
+            <input type="number" name="time" value="5" max="3" id="time"> minutes
+          </li>
+          <li>
+            <label for="close">Closing Reminders:</label>
+            <input type="radio" name="close" value="1" checked>Timed Close: Reminders will fade after 5 seconds.<br>
+            <input type="radio" name="close" value="2">Click Close: Reminders will stay on screen until user clicks on it.
+          </li>
+          <li>
+           <label for="walk"> Walk Around Reminders: <span class="remark">An additional reminder will pop up every 60 minutes reminding you to get up and walk around.</span></label>
+            <input type="checkbox" name="walk"> Enable
+          </li>
+        </ul>
+        <input type="submit" value="Update" id="submit">
+      </form>
+    </div>
     
     <button id="message">Click me.</button>
   </body>

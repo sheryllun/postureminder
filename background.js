@@ -40,7 +40,7 @@ window.addEventListener('load', function() {
                 },5000);
 
           } else {
-            $('#notification').text('Desktop notifications must be activated in order for this extension to run.');
+            $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
             return;
           }
       });
