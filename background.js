@@ -30,18 +30,19 @@ $(document).ready(function() {
 
 var reminder = {
 
+
   init: function() {
     var prefs = userPreferences.getPreferences();
-    var time = prefs.timeOption * 10000;
+    var time = prefs.timeOption * 1000;
     if(prefs.enabledOption == 0) {
       return;
     } else {
-      this.displayMessage(time);
+      this.timedReminder(time);
     }
   },
 
-  closeReminder: function() {
-
+  timedReminder: function(time) {
+    var timer = setInterval(reminder.displayMessage, time);
   },
 
   renderMessage: function() {
@@ -53,8 +54,7 @@ var reminder = {
         return fullMessage;
     },
 
-  displayMessage: function(time) {
-    var timer = setInterval(function() {
+  displayMessage: function() {
       var title = 'Your PostureMinder';
       var messageBody = reminder.renderMessage();
       var options = {
@@ -95,7 +95,6 @@ var reminder = {
       //         }
       //    });
       //  }
-    }, time);
     
   }
 
