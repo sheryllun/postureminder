@@ -1,11 +1,18 @@
 {
-  "name": "PostureMinder - Sit up straight",
+  "name": "PostureMinder",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Reminds you to correct your posture with a friendly pop-up at your specified time intervals.",
+  "description": "Reminds you to correct your posture with a friendly pop-up at specified time intervals.",
   "icons": { "128": "img/spine.png" },
+  "permissions": [
+    "notifications"
+  ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "jquery.js",
+      "options.js",
+      "background.js"
+    ],
     "persistent": false
   },
    "browser_action": {
