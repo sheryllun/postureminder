@@ -30,11 +30,11 @@ $(document).ready(function() {
 
 var reminder = {
 
-
-  init: function() {
+  run: function() {
     var prefs = userPreferences.getPreferences();
-    var time = prefs.timeOption * 1000;
+    var time = prefs.timeOption;
     if(prefs.enabledOption == 0) {
+      chrome.alarms.clear('timer');
       return;
     } else {
       this.timedReminder(time);
@@ -42,7 +42,11 @@ var reminder = {
   },
 
   timedReminder: function(time) {
-    var timer = setInterval(reminder.displayMessage, time);
+    chrome.alarms.clear('timer');
+    chrome.alarms.onAlarm.addListener(reminder.displayMessage);
+    chrome.alarms.create('timer', {
+      delayInMinutes: parseFloat(time)
+    });
   },
 
   renderMessage: function() {
@@ -110,8 +114,9 @@ var reminder = {
     e.preventDefault();
     localStorage.setItem('saved', 'true');
     userPreferences.save();
+    reminder.run();
   });
 
-reminder.init();
+reminder.run();
 
 
