@@ -12,7 +12,7 @@
     "scripts": [
       "jquery.js",
       "options.js",
-      "background.js"
+      "eventpage.js"
     ],
     "persistent": false
   },

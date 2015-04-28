@@ -1,6 +1,7 @@
 $(document).ready(function() {
   //if Chrome Notifications not supported, try the Web Notifications API.
-  if(!chrome.notifications) {
+  // if(!chrome.notifications) {
+  if(!window.Notification) {
     if(!('Notification' in window)) {
       $('#notification').text('Sorry, your browser does not support the Web Notifications API.');
     } 
@@ -9,7 +10,7 @@ $(document).ready(function() {
         if(result === 'default') {
           $('#notification').html('Desktop notifications must be allowed in order for this extension to run. <span id="request">Allow notifications</span>');
         } else if (result === 'denied') {
-          $('#notification').html('Desktop notifications must be allowed in order for this extension to run. Please remove notification blocking from Chrome Settings > Advanced Settings > Privacy > Content Settings > ');
+          $('#notification').html('Desktop notifications must be allowed in order for this extension to run. Please remove notification blocking from Chrome Settings. ');
         }
       });
     }
@@ -37,8 +38,8 @@ var reminder = {
       chrome.alarms.clear('timer');
       return;
     } else {
-      this.timedReminder(time);
-    }
+        this.timedReminder(time);
+      }
   },
 
   timedReminder: function(time) {
@@ -59,46 +60,53 @@ var reminder = {
     },
 
   displayMessage: function() {
+      var prefs = userPreferences.getPreferences();
       var title = 'Your PostureMinder';
       var messageBody = reminder.renderMessage();
-      var options = {
-        type: 'basic',
-        title: 'Your PostureMinder',
-        message: messageBody,
-        iconUrl: 'img/spine.png'
-      };
+      // var options = {
+      //   type: 'basic',
+      //   title: 'Your PostureMinder',
+      //   message: messageBody,
+      //   iconUrl: 'img/spine.png',
+      //   priority: 0
+      // };
 
-      if(chrome.notifications) {
-          chrome.notifications.clear('PostureMinder');
-          chrome.notifications.create('PostureMinder', options);
-      }
-      // } else if(Notification.permission === "granted") {
-      //     var notification = new Notification(title, {
-      //       body: messageBody,
-      //       icon: 'img/spine.png'
-      //     });
-      //     setTimeout(function(){
-      //       notification.close();
-      //     },5000);
+      // if(chrome.notifications) {
+      //     chrome.notifications.clear('PostureMinder');
+      //     chrome.notifications.create('PostureMinder', options);
+      // }
+      // } else 
+      if(Notification.permission === "granted") {
+          var notification = new Notification(title, {
+            body: messageBody,
+            icon: 'img/spine.png'
+          });
+          if(prefs.closeOption == 1) {
+              setTimeout(function() {
+                notification.close();
+              }, 10000);
+            }
 
-      //   } else if (Notification.permission !== 'denied') {
-      //     Notification.requestPermission(function(permission){
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission(function(permission){
 
-      //       if(permission === 'granted')  {
-      //         var notification = new Notification(title, {
-      //                 body: messageBody,
-      //                 icon: 'img/spine.png'
-      //               });
-      //               setTimeout(function(){
-      //                 notification.close();
-      //               },5000);
+            if(permission === 'granted')  {
+              var notification = new Notification(title, {
+                      body: messageBody,
+                      icon: 'img/spine.png'
+                    });
+              if(prefs.closeOption == 1) {
+                  setTimeout(function() {
+                    notification.close();
+                  }, 10000);
+                }
 
-      //         } else {
-      //           $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
-      //           return;
-      //         }
-      //    });
-      //  }
+              } else {
+                $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
+                return;
+              }
+         });
+       }
     
   }
 
