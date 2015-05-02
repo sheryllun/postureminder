@@ -60,8 +60,6 @@ var userPreferences = {
       setTimeout(function() {
         checkStatus();
       }, 1000);
-
-      console.log(localStorage.enabled + " " + localStorage.time + " " + localStorage.close + " " + localStorage.walk);
     }
 };
 

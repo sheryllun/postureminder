@@ -36,17 +36,36 @@ var reminder = {
     var time = prefs.timeOption;
     if(prefs.enabledOption == 0) {
       chrome.alarms.clear('timer');
+      chrome.alarms.clear('walk');
       return;
     } else {
         this.timedReminder(time);
       }
+
+    //enable walk reminder
+    if(prefs.walkOption == 'checked') {
+      this.timedWalkReminder();
+    } else {
+      chrome.alarms.clear('walk');
+    }
+
+  },
+
+  timedWalkReminder: function() {
+    chrome.alarms.clear('walk');
+    chrome.alarms.onAlarm.addListener(reminder.displayWalkMessage);
+    chrome.alarms.create('walk', {
+      when: Date.now() + 20 * 10000,
+      periodInMinutes: 2
+    });
   },
 
   timedReminder: function(time) {
     chrome.alarms.clear('timer');
     chrome.alarms.onAlarm.addListener(reminder.displayMessage);
     chrome.alarms.create('timer', {
-      delayInMinutes: parseFloat(time)
+      when: Date.now() + 10 * 10000,
+      periodInMinutes: parseFloat(time)
     });
   },
 
@@ -79,7 +98,8 @@ var reminder = {
       if(Notification.permission === "granted") {
           var notification = new Notification(title, {
             body: messageBody,
-            icon: 'img/spine.png'
+            icon: 'img/spine.png',
+            tag: 'Posture Reminder'
           });
           if(prefs.closeOption == 1) {
               setTimeout(function() {
@@ -108,6 +128,18 @@ var reminder = {
          });
        }
     
+  },
+
+  displayWalkMessage: function() {
+    var title = 'Your Walk Reminder';
+    var walkNotification = new Notification(title, {
+      body: 'Get up! Take a walk, stretch!',
+      icon: 'img/spine.png',
+      tag: 'Walk Reminder'
+    });
+    setTimeout(function() {
+      walkNotification.close();
+    }, 10000);
   }
 
 };
@@ -115,7 +147,9 @@ var reminder = {
 
 
   $('#message').click(function() {
-    reminder.displayMessage();
+    chrome.alarms.getAll(function(result) {
+      chrome.extension.getBackgroundPage().console.log(result);
+    });
   });
 
   $('#submit').click(function(e) {
