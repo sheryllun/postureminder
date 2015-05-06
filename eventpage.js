@@ -25,47 +25,57 @@ $(document).ready(function() {
 
 });
 
-  // $('#notification').on('click', 'span', function() {
-  //   Notification.requestPermission();
-  // });
 
 var reminder = {
 
   run: function() {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
+    //clear all pre-existing alarms so they won't overlap
+    chrome.alarms.clearAll();
     if(prefs.enabledOption == 0) {
-      chrome.alarms.clear('timer');
-      chrome.alarms.clear('walk');
       return;
     } else {
         this.timedReminder(time);
       }
 
-    //enable walk reminder
+   // enable walk reminder
     if(prefs.walkOption == 'checked') {
       this.timedWalkReminder();
     } else {
       chrome.alarms.clear('walk');
     }
-
   },
 
   timedWalkReminder: function() {
     chrome.alarms.clear('walk');
-    chrome.alarms.onAlarm.addListener(reminder.displayWalkMessage);
+
+    chrome.alarms.onAlarm.addListener(function(alarm) {
+      if(alarm.name === 'walk') {
+        reminder.displayWalkMessage();
+        chrome.extension.getBackgroundPage().console.log(alarm);
+      } else return;
+    });
+
     chrome.alarms.create('walk', {
-      when: Date.now() + 20 * 10000,
+      delayInMinutes: 1,
       periodInMinutes: 2
     });
   },
 
   timedReminder: function(time) {
     chrome.alarms.clear('timer');
-    chrome.alarms.onAlarm.addListener(reminder.displayMessage);
+
+    chrome.alarms.onAlarm.addListener(function(alarm) {
+      if(alarm.name === 'timer') {
+        reminder.displayMessage();
+        chrome.extension.getBackgroundPage().console.log(alarm);
+      } else return;
+    });
+
     chrome.alarms.create('timer', {
-      when: Date.now() + 10 * 10000,
-      periodInMinutes: parseFloat(time)
+      delayInMinutes: parseInt(time),
+      periodInMinutes: parseInt(time)
     });
   },
 
@@ -134,7 +144,7 @@ var reminder = {
     var title = 'Your Walk Reminder';
     var walkNotification = new Notification(title, {
       body: 'Get up! Take a walk, stretch!',
-      icon: 'img/spine.png',
+      icon: 'img/spine2.png',
       tag: 'Walk Reminder'
     });
     setTimeout(function() {
@@ -160,5 +170,4 @@ var reminder = {
   });
 
 reminder.run();
-
 
