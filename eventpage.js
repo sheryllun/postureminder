@@ -21,6 +21,7 @@ $(document).ready(function() {
     checkStatus();
   } else {
     userPreferences.init();
+    userPreferences.save();
   }
 
 });
@@ -33,7 +34,9 @@ var reminder = {
     var time = prefs.timeOption;
     //clear all pre-existing alarms so they won't overlap
     chrome.alarms.clearAll();
+    //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
+      userPreferences.disableQuestions(true);
       return;
     } else {
         this.timedReminder(time);
@@ -58,8 +61,8 @@ var reminder = {
     });
 
     chrome.alarms.create('walk', {
-      delayInMinutes: 1,
-      periodInMinutes: 2
+      delayInMinutes: 65,
+      periodInMinutes: 65
     });
   },
 
@@ -149,24 +152,42 @@ var reminder = {
     });
     setTimeout(function() {
       walkNotification.close();
-    }, 10000);
+    }, 5000);
   }
 
 };
 
+//if user decides to disable reminders, disable all other options
+
+$('input[name="default"]').mouseup(function() {
+  if($('input[name="default"]:checked').val() == 1) {
+
+    $('input[name="time"]').prop('disabled', true);
+    $('input[name="close"]').prop('disabled', true);
+    $('input[name="walk"]').prop('disabled', true);
+  } else {
+    $('input[name="time"]').prop('disabled', false);
+    $('input[name="close"]').prop('disabled', false);
+    $('input[name="walk"]').prop('disabled', false);
+  }
+});
 
 
-  $('#message').click(function() {
-    chrome.alarms.getAll(function(result) {
-      chrome.extension.getBackgroundPage().console.log(result);
-    });
-  });
+  // $('#message').click(function() {
+  //   chrome.alarms.getAll(function(result) {
+  //     chrome.extension.getBackgroundPage().console.log(result);
+  //   });
+  // });
 
   $('#submit').click(function(e) {
     e.preventDefault();
-    localStorage.setItem('saved', 'true');
-    userPreferences.save();
-    reminder.run();
+    if(userPreferences.validateTime() === false) {
+      return;
+    } else {
+      localStorage.setItem('saved', 'true');
+      userPreferences.save();
+      reminder.run();  
+    }
   });
 
 reminder.run();

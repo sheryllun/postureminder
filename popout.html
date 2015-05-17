@@ -66,6 +66,18 @@
       margin-bottom: 5px;
     }
 
+    input[type="radio"] {
+      width: 20px;
+      display: inline-block;
+    }
+
+    .timedesc {
+      width: 200px;
+      display: inline-block;
+      vertical-align: top;
+      margin-bottom: 10px;
+    }
+
     #time {
       width: 50px;
     }
@@ -73,6 +85,13 @@
     .remark {
       font-size: .9em;
       font-weight: normal;
+      font-style: italic;
+    }
+
+    .error {
+      display: none;
+      color: red;
+      font-size: .8em;
       font-style: italic;
     }
 
@@ -114,13 +133,14 @@
 
           <li>
             <label for="time">Time between reminders:</label>
-            <input type="number" name="time" id="time"> minutes
+            <input type="number" name="time" id="time" maxlength="3"> minutes
+            <span class="error">Please enter a number greater than 0. Options not saved.</span>
           </li>
 
           <li>
             <label for="close">Closing Reminders:</label>
-            <input type="radio" name="close" value="1">Timed Close: Reminders will fade after 10 seconds.<br>
-            <input type="radio" name="close" value="2">Click Close: Reminders will stay on screen until user clicks on it.
+            <input type="radio" name="close" value="1"><span class="timedesc">Timed Close: Reminders will fade after 5 seconds.</span><br>
+            <input type="radio" name="close" value="2"><span class="timedesc">Click Close: Reminders will stay on screen until user clicks on it.</span>
           </li>
 
           <li>
@@ -132,7 +152,7 @@
       </form>
     </div>
     
-    <button id="message">Click me.</button>
+    <!-- <button id="message">Click me.</button> -->
   </body>
 
   <script type="text/javascript" src="options.js"></script>

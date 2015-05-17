@@ -7,7 +7,7 @@ var userPreferences = {
 
   init: function() {
     this.enableQuestion.filter('[value="1"]').prop('checked', true);
-    this.timeQuestion.val('6');
+    this.timeQuestion.val('30');
     this.closeQuestion.filter('[value="1"]').attr('checked', 'checked');
     this.walkQuestion.prop('checked', false);
   },
@@ -45,6 +45,18 @@ var userPreferences = {
     }
   },
 
+  disableQuestions: function(bool) {
+    if(bool === true) {
+      $('input[name="time"]').prop('disabled', true);
+      $('input[name="close"]').prop('disabled', true);
+      $('input[name="walk"]').prop('disabled', true);
+    } else {
+      $('input[name="time"]').prop('disabled', false);
+      $('input[name="close"]').prop('disabled', false);
+      $('input[name="walk"]').prop('disabled', false);
+    }
+  },
+
   save: function() {
       localStorage.setItem('enabled', $('input[name="default"]:checked').val());
       localStorage.setItem('time', $('input[name="time"]').val());
@@ -60,7 +72,16 @@ var userPreferences = {
       setTimeout(function() {
         checkStatus();
       }, 1000);
+    },
+
+  validateTime: function() {
+    $('.error').css('display', 'none');
+    var enteredTime = $('#time').val();
+    if(!enteredTime.match(/\d/) || enteredTime <= 0) {
+      $('.error').css('display', 'block');
+      return false;
     }
+  }
 };
 
   function updateStatus() {
