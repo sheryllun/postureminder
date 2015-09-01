@@ -24,14 +24,19 @@ $(document).ready(function() {
     userPreferences.save();
   }
 
-});
+  var lastTime = Date.now();
 
+  reminder.run();
+
+});
 
 var reminder = {
 
   run: function() {
+    console.log('running');
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
+    this.checkSystemSleep();
     //clear all pre-existing alarms so they won't overlap
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
@@ -55,8 +60,9 @@ var reminder = {
 
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'walk') {
+        var date = Date.now();
+        chrome.extension.getBackgroundPage().console.log(alarm.name + ' time: ' + date);
         reminder.displayWalkMessage();
-        chrome.extension.getBackgroundPage().console.log(alarm);
       } else return;
     });
 
@@ -67,18 +73,33 @@ var reminder = {
   },
 
   timedReminder: function(time) {
-    chrome.alarms.clear('timer');
+    chrome.alarms.clear('situp');
 
     chrome.alarms.onAlarm.addListener(function(alarm) {
-      if(alarm.name === 'timer') {
+      if(alarm.name === 'situp') {
+        var date = Date.now();
         reminder.displayMessage();
-        chrome.extension.getBackgroundPage().console.log(alarm);
+        chrome.extension.getBackgroundPage().console.log(alarm.name + ' time: ' + date);
       } else return;
     });
 
-    chrome.alarms.create('timer', {
-      delayInMinutes: parseInt(time),
+    chrome.alarms.create('situp', {
+      when: Date.now() + (time * 60000),
       periodInMinutes: parseInt(time)
+    });
+  },
+
+  checkSystemSleep: function() {
+    chrome.alarms.onAlarm.addListener(function(alarm) {
+      if(alarm.name === 'sleep') {
+        var currentTime = Date.now();
+        console.log('current time: ' + currentTime + 'last time: ' + lastTime);
+      }
+    });
+
+    chrome.alarms.create('sleep', {
+      when: Date.now(),
+      periodInMinutes: 1
     });
   },
 
@@ -186,9 +207,8 @@ $('input[name="default"]').mouseup(function() {
     } else {
       localStorage.setItem('saved', 'true');
       userPreferences.save();
-      reminder.run();  
+      reminder.run();
     }
   });
 
-reminder.run();
 
