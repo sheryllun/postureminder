@@ -6,7 +6,8 @@
   "icons": { "128": "img/spine.png" },
   "permissions": [
     "notifications",
-    "alarms"
+    "alarms",
+    "idle"
   ],
   "background": {
     "scripts": [

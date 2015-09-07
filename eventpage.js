@@ -24,19 +24,17 @@ $(document).ready(function() {
     userPreferences.save();
   }
 
-  var lastTime = Date.now();
-
   reminder.run();
 
 });
 
 var reminder = {
 
+  systemState: 'awake',
+
   run: function() {
-    console.log('running');
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
-    this.checkSystemSleep();
     //clear all pre-existing alarms so they won't overlap
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
@@ -60,15 +58,18 @@ var reminder = {
 
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'walk') {
-        var date = Date.now();
-        chrome.extension.getBackgroundPage().console.log(alarm.name + ' time: ' + date);
-        reminder.displayWalkMessage();
-      } else return;
+        if(reminder.systemState === 'awake') {
+          console.log('walk alarm');
+          reminder.displayWalkMessage();
+        } else {
+          console.log('walk message cancelled');
+        }
+      }
     });
 
     chrome.alarms.create('walk', {
-      delayInMinutes: 65,
-      periodInMinutes: 65
+      delayInMinutes: 60,
+      periodInMinutes: 60
     });
   },
 
@@ -77,29 +78,18 @@ var reminder = {
 
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'situp') {
-        var date = Date.now();
-        reminder.displayMessage();
-        chrome.extension.getBackgroundPage().console.log(alarm.name + ' time: ' + date);
-      } else return;
+        if(reminder.systemState === 'awake') {
+          console.log(reminder.systemState + ' situp msg');
+          reminder.displayMessage();
+        } else {
+          console.log('situp message cancelled');
+        }
+      }
     });
 
     chrome.alarms.create('situp', {
       when: Date.now() + (time * 60000),
       periodInMinutes: parseInt(time)
-    });
-  },
-
-  checkSystemSleep: function() {
-    chrome.alarms.onAlarm.addListener(function(alarm) {
-      if(alarm.name === 'sleep') {
-        var currentTime = Date.now();
-        console.log('current time: ' + currentTime + 'last time: ' + lastTime);
-      }
-    });
-
-    chrome.alarms.create('sleep', {
-      when: Date.now(),
-      periodInMinutes: 1
     });
   },
 
@@ -211,4 +201,12 @@ $('input[name="default"]').mouseup(function() {
     }
   });
 
+    chrome.idle.setDetectionInterval(15);
+    chrome.idle.onStateChanged.addListener(function(newState) {
+      if(newState === 'idle' || newState === 'locked') {
+        reminder.systemState = 'idle';
+      } else {
+        reminder.systemState = 'awake';
+      }
+    });
 
