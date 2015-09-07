@@ -179,7 +179,7 @@ $('#submit').click(function(e) {
   } else {
     localStorage.setItem('saved', 'true');
     userPreferences.save();
-    reminder.run();
+    app.reminder.run();
   }
 });
 
