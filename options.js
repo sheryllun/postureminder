@@ -1,5 +1,4 @@
 var userPreferences = {
-
   enableQuestion: $('input[name="default"]'),
   timeQuestion: $('input[name="time"]'),
   closeQuestion: $('input[name="close"]'),
@@ -17,9 +16,8 @@ var userPreferences = {
       enabledOption: localStorage.enabled,
       timeOption: localStorage.time,
       closeOption: localStorage.close,
-      walkOption :localStorage.walk
+      walkOption: localStorage.walk
     };
-
     return allPrefs;
   },
 
@@ -84,15 +82,15 @@ var userPreferences = {
   }
 };
 
-  function updateStatus() {
-    $('#notification').html('Options saved.');
-  }
+function updateStatus() {
+  $('#notification').html('Options saved.');
+}
 
-  function checkStatus() {
-    var currentStatus = localStorage.enabled;
-    if(currentStatus == 0) {
-      $('#notification').html('Reminders are currently <strong>disabled</strong>.');
-    } else {
-      $('#notification').html('Reminders are currently <strong>enabled</strong>.');
-    }
+function checkStatus() {
+  var currentStatus = localStorage.enabled;
+  if(currentStatus == 0) {
+    $('#notification').html('Reminders are currently <strong>disabled</strong>.');
+  } else {
+    $('#notification').html('Reminders are currently <strong>enabled</strong>.');
   }
+}
