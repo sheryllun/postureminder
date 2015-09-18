@@ -36,7 +36,8 @@ app.reminder = {
   run: function() {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
-    this.checkSystemState(time);
+    console.log('run function ' + app.global.systemState);
+    this.checkSystemState();
     //clear all pre-existing alarms so they won't overlap
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
@@ -67,8 +68,8 @@ app.reminder = {
       }
     });
     chrome.alarms.create('walk', {
-      delayInMinutes: 65,
-      periodInMinutes: 65
+      delayInMinutes: 61,
+      periodInMinutes: 61
     });
   },
 
@@ -90,13 +91,18 @@ app.reminder = {
     });
   },
 
-  checkSystemState: function(time) {
-    chrome.idle.setDetectionInterval((time * 60) - 30);
+  checkSystemState: function() {
+    chrome.idle.setDetectionInterval(300);
     chrome.idle.onStateChanged.addListener(function(newState) {
-      if(newState === 'idle' || newState === 'locked') {
+      if(newState === 'idle') {
         app.global.systemState = 'idle';
-      } else {
+        console.log('state: idle');
+      } else if(newState === 'locked') {
+          app.global.systemState = 'locked';
+          console.log('state: locked');
+       } else {
         app.global.systemState = 'awake';
+        console.log('state: awake');
       }
     });
   },
