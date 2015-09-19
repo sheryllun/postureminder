@@ -59,12 +59,14 @@ app.reminder = {
     chrome.alarms.clear('walk');
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'walk') {
-        if(app.global.systemState === 'awake') {
-          console.log('walk alarm');
-          app.reminder.displayWalkMessage();
-        } else {
-          console.log('walk message cancelled');
-        }
+        chrome.idle.queryState(300, function(newState) {
+          if(newState === 'active') {
+            console.log('walk msg ' + newState);
+            app.reminder.displayWalkMessage();
+          } else {
+            console.log('walk cancelled ' + newState);
+          }
+        });
       }
     });
     chrome.alarms.create('walk', {
@@ -74,25 +76,33 @@ app.reminder = {
   },
 
   timedReminder: function(time) {
+    var queryTime;
+    if(time > 5) {
+      queryTime = (time * 60) - ((time * 60) - 240);
+    } else {
+      queryTime = 50;
+    }
     chrome.alarms.clear('situp');
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'situp') {
-        if(app.global.systemState === 'awake') {
-          console.log(app.global.systemState + ' situp msg');
-          app.reminder.displayMessage();
-        } else {
-          console.log('situp message cancelled');
-        }
+        chrome.idle.queryState(queryTime, function(newState) {
+          if(newState === 'active') {
+            console.log('situp msg ' + newState);
+            app.reminder.displayMessage();
+          } else {
+            console.log('situp cancelled ' + newState);
+          }
+        });
       }
     });
     chrome.alarms.create('situp', {
-      when: Date.now() + (time * 60000),
+      delayInMinutes: parseInt(time),
       periodInMinutes: parseInt(time)
     });
   },
 
   checkSystemState: function() {
-    chrome.idle.setDetectionInterval(300);
+    chrome.idle.setDetectionInterval(60);
     chrome.idle.onStateChanged.addListener(function(newState) {
       if(newState === 'idle') {
         app.global.systemState = 'idle';
