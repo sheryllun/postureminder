@@ -27,7 +27,7 @@ app.reminder = {
       userPreferences.loadDom();
       checkStatus();
     } else {
-      userPreferences.init(15);
+      userPreferences.init(2);
     }
     this.run();
   },

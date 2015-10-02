@@ -8,8 +8,10 @@ var userPreferences = {
     localStorage.setItem('enabled', '1');
     localStorage.setItem('time', time);
     localStorage.setItem('close', '1');
+    localStorage.setItem('walk', 'not checked');
+    
     this.enableQuestion.filter('[value="1"]').prop('checked', true);
-    this.timeQuestion.val('2');
+    this.timeQuestion.val(time);
     this.closeQuestion.filter('[value="1"]').attr('checked', 'checked');
     this.walkQuestion.prop('checked', false);
   },
