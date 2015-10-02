@@ -4,9 +4,12 @@ var userPreferences = {
   closeQuestion: $('input[name="close"]'),
   walkQuestion: $('input[name="walk"]'),
 
-  init: function() {
+  init: function(time) {
+    localStorage.setItem('enabled', '1');
+    localStorage.setItem('time', time);
+    localStorage.setItem('close', '1');
     this.enableQuestion.filter('[value="1"]').prop('checked', true);
-    this.timeQuestion.val('30');
+    this.timeQuestion.val('2');
     this.closeQuestion.filter('[value="1"]').attr('checked', 'checked');
     this.walkQuestion.prop('checked', false);
   },

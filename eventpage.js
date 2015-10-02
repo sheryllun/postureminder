@@ -1,7 +1,7 @@
 var app = {};
 
 app.global = {
-  systemState: 'awake'
+  systemState: 'active'
 };
 
 app.init = function() {
@@ -27,8 +27,7 @@ app.reminder = {
       userPreferences.loadDom();
       checkStatus();
     } else {
-      userPreferences.init();
-      userPreferences.save();
+      userPreferences.init(15);
     }
     this.run();
   },
@@ -140,7 +139,7 @@ app.reminder = {
           if(prefs.closeOption == 1) {
               setTimeout(function() {
                 notification.close();
-              }, 10000);
+              }, 5000);
             }
         } else if (Notification.permission !== 'denied') {
           Notification.requestPermission(function(permission){
@@ -152,7 +151,7 @@ app.reminder = {
               if(prefs.closeOption == 1) {
                   setTimeout(function() {
                     notification.close();
-                  }, 10000);
+                  }, 5000);
                 }
               } else {
                 $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
