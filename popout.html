@@ -81,6 +81,10 @@
       width: 50px;
     }
 
+    .gray {
+      color: #ADABAB;
+    }
+
     .remark {
       font-size: .9em;
       font-weight: normal;
@@ -88,9 +92,10 @@
     }
 
     .error {
+      margin-top: 3px;
       display: none;
       color: red;
-      font-size: .8em;
+      font-size: 11px;
       font-style: italic;
     }
 
@@ -124,7 +129,7 @@
       <h2>Options</h2>
       <form action="">
         <ul>
-          <li>
+          <li class="primary">
             <label for="default">Enable/Disable Reminders: <span class="remark">Disabling reminders disables the entire application.</span></label>
             <input type="radio" name="default" value="1">Enable<br>
             <input type="radio" name="default" value="0">Disable
@@ -133,7 +138,7 @@
           <li>
             <label for="time">Time between reminders:</label>
             <input type="number" name="time" id="time" maxlength="3"> minutes
-            <span class="settime error">Please enter a number between 1 and 59. Options not saved.</span>
+            <div class="settime error">Please enter a number between 1 and 59. Options not saved.</div>
           </li>
 
           <li>
@@ -148,6 +153,7 @@
           </li>
         </ul>
         <input type="submit" value="Update" id="submit">
+        <div class="savemsg error">Click update to save changes.</div>
       </form>
     </div>
   </body>

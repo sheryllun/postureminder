@@ -182,15 +182,19 @@ $('input[name="default"]').mouseup(function() {
     $('input[name="time"]').prop('disabled', true);
     $('input[name="close"]').prop('disabled', true);
     $('input[name="walk"]').prop('disabled', true);
+    $('li:not(.primary)').addClass('gray');
   } else {
     $('input[name="time"]').prop('disabled', false);
     $('input[name="close"]').prop('disabled', false);
     $('input[name="walk"]').prop('disabled', false);
+    $('li:not(.primary)').removeClass('gray');
   }
+  $('.savemsg').show();
 });
 
 $('#submit').click(function(e) {
   e.preventDefault();
+  $('.savemsg').hide();
   if(userPreferences.validateTime() === false) {
     return;
   } else {
