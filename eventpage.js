@@ -24,19 +24,21 @@ app.reminder = {
       }
     }
     if(localStorage.saved) {
+      console.log('init saved');
       userPreferences.loadDom();
       checkStatus();
     } else {
+      console.log('init not saved');
       userPreferences.init(2);
     }
+    this.checkSystemState();
     this.run();
   },
 
   run: function() {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
-    console.log('run function ' + app.global.systemState);
-    this.checkSystemState();
+    chrome.extension.getBackgroundPage().console.log('run function ' + app.global.systemState);
     //clear all pre-existing alarms so they won't overlap
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
@@ -77,7 +79,7 @@ app.reminder = {
   timedReminder: function(time) {
     var queryTime;
     if(time > 5) {
-      queryTime = (time * 60) - ((time * 60) - 240);
+      queryTime = (time * 60) - ((time * 60) - 240); //4 minutes
     } else {
       queryTime = 50;
     }
@@ -192,7 +194,6 @@ $('#submit').click(function(e) {
   if(userPreferences.validateTime() === false) {
     return;
   } else {
-    localStorage.setItem('saved', 'true');
     userPreferences.save();
     app.reminder.run();
   }
