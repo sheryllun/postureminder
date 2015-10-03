@@ -79,10 +79,10 @@ var userPreferences = {
     },
 
   validateTime: function() {
-    $('.error').css('display', 'none');
+    $('.settime').css('display', 'none');
     var enteredTime = $('#time').val();
-    if(!enteredTime.match(/\d/) || enteredTime <= 0) {
-      $('.error').css('display', 'block');
+    if(!enteredTime.match(/\d/) || enteredTime <= 0 || enteredTime > 59) {
+      $('.settime').css('display', 'block');
       return false;
     }
   }
