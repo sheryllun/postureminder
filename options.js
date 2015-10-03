@@ -47,6 +47,11 @@ var userPreferences = {
     if(preferences.walkOption == 'checked') {
       this.walkQuestion.prop('checked', 'checked');
     }
+
+    if(preferences.enabledOption == 0) {
+      userPreferences.disableQuestions(true);
+    }
+
   },
 
   disableQuestions: function(bool) {
@@ -54,10 +59,12 @@ var userPreferences = {
       $('input[name="time"]').prop('disabled', true);
       $('input[name="close"]').prop('disabled', true);
       $('input[name="walk"]').prop('disabled', true);
+      $('li:not(.primary)').addClass('gray');
     } else {
       $('input[name="time"]').prop('disabled', false);
       $('input[name="close"]').prop('disabled', false);
       $('input[name="walk"]').prop('disabled', false);
+      $('li:not(.primary)').removeClass('gray');
     }
   },
 
@@ -89,14 +96,14 @@ var userPreferences = {
 };
 
 function updateStatus() {
-  $('#notification').html('Options saved.');
+  $('#notification').html('Options saved');
 }
 
 function checkStatus() {
   var currentStatus = localStorage.enabled;
   if(currentStatus == 0) {
-    $('#notification').html('Reminders are currently <strong>disabled</strong>.');
+    $('#notification').html('Reminders are currently <strong>disabled</strong>');
   } else {
-    $('#notification').html('Reminders are currently <strong>enabled</strong>.');
+    $('#notification').html('Reminders are currently <strong>enabled</strong>');
   }
 }
