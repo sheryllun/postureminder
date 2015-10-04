@@ -77,11 +77,9 @@ app.reminder = {
   },
 
   timedReminder: function(time) {
-    var queryTime;
+    var queryTime = 50;
     if(time > 5) {
       queryTime = (time * 60) - ((time * 60) - 240); //4 minutes
-    } else {
-      queryTime = 50;
     }
     chrome.alarms.clear('situp');
     chrome.alarms.onAlarm.addListener(function(alarm) {
@@ -178,17 +176,11 @@ app.reminder = {
 
 //if user decides to disable reminders, disable all other options
 $('input[name="default"]').mouseup(function() {
+  var bool = false;
   if($('input[name="default"]:checked').val() == 1) {
-    $('input[name="time"]').prop('disabled', true);
-    $('input[name="close"]').prop('disabled', true);
-    $('input[name="walk"]').prop('disabled', true);
-    $('li:not(.primary)').addClass('gray');
-  } else {
-    $('input[name="time"]').prop('disabled', false);
-    $('input[name="close"]').prop('disabled', false);
-    $('input[name="walk"]').prop('disabled', false);
-    $('li:not(.primary)').removeClass('gray');
-  }
+    bool = true;
+  } 
+  userPreferences.disableQuestions(bool);
   $('.savemsg').show();
 });
 
