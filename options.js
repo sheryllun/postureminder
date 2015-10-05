@@ -51,7 +51,6 @@ var userPreferences = {
     if(preferences.enabledOption == 0) {
       userPreferences.disableQuestions(true);
     }
-
   },
 
   disableQuestions: function(bool) {

@@ -31,19 +31,18 @@ app.reminder = {
       console.log('init not saved');
       userPreferences.init(2);
     }
-    this.checkSystemState();
+    //this.checkSystemState();
     this.run();
   },
 
   run: function() {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
-    chrome.extension.getBackgroundPage().console.log('run function ' + app.global.systemState);
-    //clear all pre-existing alarms so they won't overlap
-    chrome.alarms.clearAll();
+    chrome.extension.getBackgroundPage().console.log('reminder.run()');
     //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
       userPreferences.disableQuestions(true);
+      chrome.alarms.clearAll();
       return;
     } else {
         this.timedReminder(time);
@@ -57,7 +56,6 @@ app.reminder = {
   },
 
   timedWalkReminder: function() {
-    chrome.alarms.clear('walk');
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'walk') {
         chrome.idle.queryState(300, function(newState) {
@@ -81,7 +79,6 @@ app.reminder = {
     if(time > 5) {
       queryTime = (time * 60) - ((time * 60) - 240); //4 minutes
     }
-    chrome.alarms.clear('situp');
     chrome.alarms.onAlarm.addListener(function(alarm) {
       if(alarm.name === 'situp') {
         chrome.idle.queryState(queryTime, function(newState) {
@@ -100,21 +97,21 @@ app.reminder = {
     });
   },
 
-  checkSystemState: function() {
-    chrome.idle.setDetectionInterval(60);
-    chrome.idle.onStateChanged.addListener(function(newState) {
-      if(newState === 'idle') {
-        app.global.systemState = 'idle';
-        console.log('state: idle');
-      } else if(newState === 'locked') {
-          app.global.systemState = 'locked';
-          console.log('state: locked');
-       } else {
-        app.global.systemState = 'awake';
-        console.log('state: awake');
-      }
-    });
-  },
+  // checkSystemState: function() {
+  //   chrome.idle.setDetectionInterval(60);
+  //   chrome.idle.onStateChanged.addListener(function(newState) {
+  //     if(newState === 'idle') {
+  //       app.global.systemState = 'idle';
+  //       console.log('state: idle');
+  //     } else if(newState === 'locked') {
+  //         app.global.systemState = 'locked';
+  //         console.log('state: locked');
+  //      } else {
+  //       app.global.systemState = 'awake';
+  //       console.log('state: awake');
+  //     }
+  //   });
+  // },
 
   renderMessage: function() {
     var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Beep, posture please, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, '],
