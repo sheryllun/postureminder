@@ -5,6 +5,7 @@
   "description": "Reminds you to correct your posture with a friendly pop-up at specified time intervals.",
   "icons": { "128": "img/spine.png" },
   "permissions": [
+    "background",
     "notifications",
     "alarms",
     "idle"

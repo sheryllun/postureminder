@@ -39,11 +39,11 @@ app.reminder = {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
     chrome.extension.getBackgroundPage().console.log('reminder.run()');
-    this.keepAwake();
+    //this.keepAwake();
+    chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
       userPreferences.disableQuestions(true);
-      chrome.alarms.clearAll();
       return;
     } else {
         this.timedReminder(time);
@@ -76,7 +76,7 @@ app.reminder = {
   },
 
   timedReminder: function(time) {
-    var queryTime = 50;
+    var queryTime = 50; //seconds
     if(time > 5) {
       queryTime = (time * 60) - ((time * 60) - 240); //4 minutes
     }
