@@ -39,7 +39,6 @@ app.reminder = {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
     chrome.extension.getBackgroundPage().console.log('reminder.run()');
-    //this.keepAwake();
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
@@ -169,18 +168,6 @@ app.reminder = {
     setTimeout(function() {
       walkNotification.close();
     }, 5000);
-  },
-
-  keepAwake: function() {
-    chrome.alarms.onAlarm.addListener(function(alarm) {
-      if(alarm.name === 'wake') {
-        console.log('stay awake');
-      }
-    });
-    chrome.alarms.create('wake', {
-      delayInMinutes: 10,
-      periodInMinutes: 10
-    });
   }
 };
 
