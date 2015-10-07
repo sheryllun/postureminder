@@ -165,9 +165,11 @@ app.reminder = {
       icon: 'img/spine2.png',
       tag: 'Walk Reminder'
     });
-    setTimeout(function() {
-      walkNotification.close();
-    }, 5000);
+    if(prefs.closeOption == 1) {
+      setTimeout(function() {
+        walkNotification.close();
+      }, 5000);      
+    }
   }
 };
 
