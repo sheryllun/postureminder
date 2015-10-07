@@ -24,14 +24,12 @@ app.reminder = {
       }
     }
     if(localStorage.saved) {
-      console.log('init saved');
       userPreferences.loadDom();
       checkStatus();
     } else {
-      console.log('init not saved');
-      userPreferences.init(2);
+      userPreferences.init(15);
     }
-    //this.checkSystemState();
+    this.checkSystemState();
     this.run();
   },
 
@@ -97,21 +95,21 @@ app.reminder = {
     });
   },
 
-  // checkSystemState: function() {
-  //   chrome.idle.setDetectionInterval(60);
-  //   chrome.idle.onStateChanged.addListener(function(newState) {
-  //     if(newState === 'idle') {
-  //       app.global.systemState = 'idle';
-  //       console.log('state: idle');
-  //     } else if(newState === 'locked') {
-  //         app.global.systemState = 'locked';
-  //         console.log('state: locked');
-  //      } else {
-  //       app.global.systemState = 'awake';
-  //       console.log('state: awake');
-  //     }
-  //   });
-  // },
+  checkSystemState: function() {
+    chrome.idle.setDetectionInterval(60);
+    chrome.idle.onStateChanged.addListener(function(newState) {
+      if(newState === 'idle') {
+        app.global.systemState = 'idle';
+        console.log('state: idle');
+      } else if(newState === 'locked') {
+          app.global.systemState = 'locked';
+          console.log('state: locked');
+       } else {
+        app.global.systemState = 'awake';
+        console.log('state: awake');
+      }
+    });
+  },
 
   renderMessage: function() {
     var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Beep, posture please, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, '],
