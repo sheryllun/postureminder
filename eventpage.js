@@ -191,7 +191,7 @@ app.reminder = {
     if(prefs.closeOption == 1) {
       setTimeout(function() {
         walkNotification.close();
-      }, 5000);      
+      }, 20000);
     }
   }
 };
