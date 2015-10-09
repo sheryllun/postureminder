@@ -158,7 +158,7 @@ app.reminder = {
           if(prefs.closeOption == 1) {
               setTimeout(function() {
                 notification.close();
-              }, 5000);
+              }, 20000);
             }
         } else if (Notification.permission !== 'denied') {
           Notification.requestPermission(function(permission){
@@ -170,7 +170,7 @@ app.reminder = {
               if(prefs.closeOption == 1) {
                   setTimeout(function() {
                     sitNotification.close();
-                  }, 5000);
+                  }, 20000);
                 }
               } else {
                 $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
