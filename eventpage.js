@@ -1,7 +1,8 @@
 var app = {};
 
 app.global = {
-  systemState: 'active'
+  systemState1: 'active',
+  systemState2: 'active'
 };
 
 app.init = function() {
@@ -54,66 +55,89 @@ app.reminder = {
   },
 
   timedWalkReminder: function() {
-    chrome.alarms.onAlarm.addListener(function(alarm) {
-      if(alarm.name === 'walk') {
-        chrome.idle.queryState(300, function(newState) {
-          if(newState === 'active') {
-            console.log('walk msg ' + newState);
-            app.reminder.displayWalkMessage();
-          } else {
-            console.log('walk cancelled ' + newState);
-          }
-        });
-      }
-    });
+    chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
     chrome.alarms.create('walk', {
-      delayInMinutes: 61,
-      periodInMinutes: 61
+      delayInMinutes: 31,
+      periodInMinutes: 31
     });
   },
 
   timedReminder: function(time) {
-    var queryTime = 50; //seconds
-    if(time > 5) {
-      queryTime = (time * 60) - ((time * 60) - 240); //4 minutes
-    }
-    chrome.alarms.onAlarm.addListener(function(alarm) {
-      if(alarm.name === 'situp') {
-        chrome.idle.queryState(queryTime, function(newState) {
-          if(newState === 'active') {
-            console.log('situp msg ' + newState);
-            app.reminder.displayMessage();
-          } else {
-            console.log('situp cancelled ' + newState);
-          }
-        });
-      }
-    });
+    chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
     chrome.alarms.create('situp', {
       delayInMinutes: parseInt(time),
       periodInMinutes: parseInt(time)
     });
   },
 
+  setIdleTime: function() {
+    var prefs = userPreferences.getPreferences();
+    var time = prefs.timeOption;
+    var queryTime = 50; //seconds
+    if(time > 5) {
+      queryTime = (time * 60) - ((time * 60) - 240); //4 minutes
+    }
+    return queryTime;
+  },
+
+  sitListener: function(alarm) {
+    var queryTime = app.reminder.setIdleTime();
+    if(alarm.name === 'situp') {
+      chrome.idle.queryState(queryTime, function(newState) {
+        if(newState === 'active') {
+          console.log('situp msg ' + newState);
+          app.reminder.displayMessage();
+        } else {
+          console.log('situp cancelled ' + newState);
+        }
+      });
+    }
+  },
+
+  walkListener: function(alarm) {
+    if(alarm.name === 'walk') {
+      chrome.idle.queryState(300, function(newState) {
+        if(newState === 'active') {
+          console.log('walk msg ' + newState);
+          app.reminder.displayWalkMessage();
+        } else {
+          console.log('walk cancelled ' + newState);
+        }
+      });
+    }
+  },
+
   checkSystemState: function() {
     chrome.idle.setDetectionInterval(60);
     chrome.idle.onStateChanged.addListener(function(newState) {
       if(newState === 'idle') {
-        app.global.systemState = 'idle';
-        console.log('state: idle');
+        app.global.systemState2 = 'idle';
       } else if(newState === 'locked') {
-          app.global.systemState = 'locked';
-          console.log('state: locked');
+          app.global.systemState2 = 'locked';
        } else {
-        app.global.systemState = 'awake';
-        console.log('state: awake');
+        app.global.systemState2 = 'awake';
       }
+      app.reminder.manageAlarms();
+      console.log('systemState1: ' + app.global.systemState1 + ' systemState2: ' + app.global.systemState2);
     });
   },
 
+  manageAlarms: function() {
+    if(app.global.systemState2 === 'locked') {
+      chrome.alarms.clearAll();
+      chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
+      chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
+      console.log('all alarms cleared');
+    } else if (app.global.systemState2 === 'awake' && app.global.systemState1 === 'locked') {
+    this.run();
+    console.log('restarting app');
+  }
+  app.global.systemState1 = app.global.systemState2;
+},
+
   renderMessage: function() {
-    var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Beep, posture please, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, '],
-       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'babe.'],
+    var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Beep, posture please, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, '],
+       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'babe.', 'chum.', 'mate.', 'matey.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
        begInt = Math.floor(Math.random() * postureBeginning.length),
        endInt = Math.floor(Math.random() * postureEnd.length),
        fullMessage = postureBeginning[begInt] + postureEnd[endInt];
@@ -139,13 +163,13 @@ app.reminder = {
         } else if (Notification.permission !== 'denied') {
           Notification.requestPermission(function(permission){
             if(permission === 'granted')  {
-              var notification = new Notification(title, {
+              var sitNotification = new Notification(title, {
                       body: messageBody,
                       icon: 'img/spine.png'
                     });
               if(prefs.closeOption == 1) {
                   setTimeout(function() {
-                    notification.close();
+                    sitNotification.close();
                   }, 5000);
                 }
               } else {
@@ -157,6 +181,7 @@ app.reminder = {
   },
 
   displayWalkMessage: function() {
+    var prefs = userPreferences.getPreferences();
     var title = 'Your Walk Reminder';
     var walkNotification = new Notification(title, {
       body: 'Get up! Take a walk, stretch!',
