@@ -39,6 +39,8 @@ app.reminder = {
     var time = prefs.timeOption;
     chrome.extension.getBackgroundPage().console.log('reminder.run()');
     chrome.alarms.clearAll();
+    chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
+    chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
     //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
       userPreferences.disableQuestions(true);
@@ -51,14 +53,15 @@ app.reminder = {
       this.timedWalkReminder();
     } else {
       chrome.alarms.clear('walk');
+      chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
     }
   },
 
   timedWalkReminder: function() {
     chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
     chrome.alarms.create('walk', {
-      delayInMinutes: 31,
-      periodInMinutes: 31
+      delayInMinutes: 61,
+      periodInMinutes: 61
     });
   },
 
@@ -184,7 +187,7 @@ app.reminder = {
     var prefs = userPreferences.getPreferences();
     var title = 'Your Walk Reminder';
     var walkNotification = new Notification(title, {
-      body: 'Get up! Take a walk, stretch!',
+      body: 'Time to get up and take a walk. Stretch!',
       icon: 'img/spine2.png',
       tag: 'Walk Reminder'
     });
