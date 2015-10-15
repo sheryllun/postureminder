@@ -24,14 +24,23 @@ app.reminder = {
         });
       }
     }
+
     if(localStorage.saved) {
       userPreferences.loadDom();
       checkStatus();
     } else {
       userPreferences.init(15);
     }
-    this.checkSystemState();
-    this.run();
+
+    this.countAlarms(function(count) {
+       numAlarms = count;
+       if(numAlarms > 0) {
+        return;
+       } else {
+        app.reminder.checkSystemState();
+        app.reminder.run();
+       }
+    });
   },
 
   run: function() {
@@ -123,6 +132,13 @@ app.reminder = {
       app.reminder.manageAlarms();
       console.log('systemState1: ' + app.global.systemState1 + ' systemState2: ' + app.global.systemState2);
     });
+  },
+
+    countAlarms: function(callback) {
+    var count;
+    chrome.alarms.getAll(function(alarms) { 
+      callback(alarms.length); 
+    }); 
   },
 
   manageAlarms: function() {
