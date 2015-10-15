@@ -134,7 +134,7 @@ app.reminder = {
     });
   },
 
-    countAlarms: function(callback) {
+  countAlarms: function(callback) {
     var count;
     chrome.alarms.getAll(function(alarms) { 
       callback(alarms.length); 

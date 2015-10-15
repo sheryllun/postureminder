@@ -12,9 +12,9 @@
   ],
   "background": {
     "scripts": [
-      "jquery.js",
-      "options.js",
-      "eventpage.js"
+      "/js/jquery.js",
+      "/js/options.js",
+      "/js/background.js"
     ],
     "persistent": true
   },
