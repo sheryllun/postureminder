@@ -1,3 +1,11 @@
+chrome.runtime.onInstalled.addListener(function () {
+  console.log('add listeners');
+  chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
+  chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
+});
+
 var app = {};
 
 app.global = {
@@ -26,21 +34,15 @@ app.reminder = {
     }
 
     if(localStorage.saved) {
+      chrome.extension.getBackgroundPage().console.log('init saved');
       userPreferences.loadDom();
       checkStatus();
     } else {
+      chrome.extension.getBackgroundPage().console.log('init new');
       userPreferences.init(15);
     }
-
-    this.countAlarms(function(count) {
-       numAlarms = count;
-       if(numAlarms > 0) {
-        return;
-       } else {
-        app.reminder.checkSystemState();
-        app.reminder.run();
-       }
-    });
+      app.reminder.checkSystemState();
+      app.reminder.run();
   },
 
   run: function() {
@@ -48,8 +50,6 @@ app.reminder = {
     var time = prefs.timeOption;
     chrome.extension.getBackgroundPage().console.log('reminder.run()');
     chrome.alarms.clearAll();
-    chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
-    chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
     //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
       userPreferences.disableQuestions(true);
@@ -62,12 +62,10 @@ app.reminder = {
       this.timedWalkReminder();
     } else {
       chrome.alarms.clear('walk');
-      chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
     }
   },
 
   timedWalkReminder: function() {
-    chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
     chrome.alarms.create('walk', {
       delayInMinutes: 61,
       periodInMinutes: 61
@@ -75,7 +73,6 @@ app.reminder = {
   },
 
   timedReminder: function(time) {
-    chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
     chrome.alarms.create('situp', {
       delayInMinutes: parseInt(time),
       periodInMinutes: parseInt(time)
@@ -144,8 +141,6 @@ app.reminder = {
   manageAlarms: function() {
     if(app.global.systemState2 === 'locked') {
       chrome.alarms.clearAll();
-      chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
-      chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
       console.log('all alarms cleared');
     } else if (app.global.systemState2 === 'awake' && app.global.systemState1 === 'locked') {
     this.run();
