@@ -1,7 +1,12 @@
 chrome.runtime.onInstalled.addListener(function () {
   console.log('add listeners');
-  chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
-  chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
+
+});
+
+chrome.runtime.onStartup.addListener(function() {
+  console.log('startup');
   chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
   chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
 });
@@ -10,7 +15,7 @@ var app = {};
 
 app.global = {
   systemState1: 'active',
-  systemState2: 'active'
+  systemState2: 'active',
 };
 
 app.init = function() {
@@ -33,6 +38,8 @@ app.reminder = {
       }
     }
 
+    app.reminder.checkSystemState();
+
     if(localStorage.saved) {
       chrome.extension.getBackgroundPage().console.log('init saved');
       userPreferences.loadDom();
@@ -41,8 +48,15 @@ app.reminder = {
       chrome.extension.getBackgroundPage().console.log('init new');
       userPreferences.init(15);
     }
-      app.reminder.checkSystemState();
+
+    if(localStorage.firstRun === 'done') {
+      chrome.extension.getBackgroundPage().console.log('prog returned');
+      return;
+      } else {
+      chrome.extension.getBackgroundPage().console.log('regular run');
       app.reminder.run();
+      localStorage.setItem('firstRun', 'done');
+    }
   },
 
   run: function() {
@@ -117,6 +131,7 @@ app.reminder = {
   },
 
   checkSystemState: function() {
+    chrome.extension.getBackgroundPage().console.log('check systemstate');
     chrome.idle.setDetectionInterval(60);
     chrome.idle.onStateChanged.addListener(function(newState) {
       if(newState === 'idle') {
