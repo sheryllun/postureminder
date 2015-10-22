@@ -116,7 +116,6 @@ app.reminder = {
   },
 
   checkSystemState: function() {
-    chrome.extension.getBackgroundPage().console.log('check systemstate');
     chrome.idle.setDetectionInterval(60);
     chrome.idle.onStateChanged.addListener(function(newState) {
       if(newState === 'idle') {
@@ -127,24 +126,21 @@ app.reminder = {
         app.global.systemState2 = 'awake';
       }
       app.reminder.manageAlarms();
-      console.log('systemState1: ' + app.global.systemState1 + ' systemState2: ' + app.global.systemState2);
     });
   },
 
   manageAlarms: function() {
     if(app.global.systemState2 === 'locked') {
       chrome.alarms.clearAll();
-      console.log('all alarms cleared');
     } else if (app.global.systemState2 === 'awake' && app.global.systemState1 === 'locked') {
-    this.run();
-    console.log('restarting app');
-  }
+        this.run();
+    }
   app.global.systemState1 = app.global.systemState2;
 },
 
   renderMessage: function() {
-    var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Beep, posture please, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, '],
-       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'babe.', 'chum.', 'mate.', 'matey.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
+    var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Beep, posture please, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, ', 'Dump the slump, '],
+       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'soldier', 'chum.', 'mate.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
        begInt = Math.floor(Math.random() * postureBeginning.length),
        endInt = Math.floor(Math.random() * postureEnd.length),
        fullMessage = postureBeginning[begInt] + postureEnd[endInt];
@@ -191,7 +187,7 @@ app.reminder = {
     var prefs = userPreferences.getPreferences();
     var title = 'Your Walk Reminder';
     var walkNotification = new Notification(title, {
-      body: 'Time to get up and take a walk. Stretch!',
+      body: 'Time to get up and stretch! Take a break.',
       icon: 'img/spine2.png',
       tag: 'Walk Reminder'
     });
