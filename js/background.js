@@ -2,7 +2,6 @@ chrome.runtime.onInstalled.addListener(function () {
   console.log('add listeners');
   chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
   chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
-
 });
 
 chrome.runtime.onStartup.addListener(function() {
@@ -24,20 +23,6 @@ app.init = function() {
 
 app.reminder = {
   init: function() {
-    if(!window.Notification) {
-      if(!('Notification' in window)) {
-        $('#notification').text('Sorry, your browser does not support the Web Notifications API.');
-      } else {
-        Notification.requestPermission(function(result) {
-          if(result === 'default') {
-            $('#notification').html('Desktop notifications must be allowed in order for this extension to run.');
-          } else if (result === 'denied') {
-            $('#notification').html('Desktop notifications must be allowed in order for this extension to run. Please allow notifications in Chrome Settings.');
-          }
-        });
-      }
-    }
-
     app.reminder.checkSystemState();
 
     if(localStorage.saved) {
@@ -144,13 +129,6 @@ app.reminder = {
       app.reminder.manageAlarms();
       console.log('systemState1: ' + app.global.systemState1 + ' systemState2: ' + app.global.systemState2);
     });
-  },
-
-  countAlarms: function(callback) {
-    var count;
-    chrome.alarms.getAll(function(alarms) { 
-      callback(alarms.length); 
-    }); 
   },
 
   manageAlarms: function() {

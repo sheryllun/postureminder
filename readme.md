@@ -1,5 +1,4 @@
 PostureMinder
-=============
-Reminders to Improve Your Posture
--------------
+-----
+Sit up straight.
 
