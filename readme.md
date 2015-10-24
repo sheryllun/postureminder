@@ -1,6 +1,6 @@
 PostureMinder
 -----
-Sit up straight.
+### Sit up straight.
 
 **Features**
 
@@ -10,8 +10,6 @@ Sit up straight.
 
 - **Timed close or click close reminders**
 
-- **Walk reminder** In addition to sitting up straight, you should also step away from your device every once in a while.
+- **Walk reminders** In addition to sitting up straight, you should also step away from your device every once in a while.
 
 - **Snarkiness** Fun, snarky messages to keep you entertained.
-
-
