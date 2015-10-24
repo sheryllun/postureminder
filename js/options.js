@@ -29,15 +29,12 @@ var userPreferences = {
 
   loadDom: function() {
     var preferences = this.getPreferences();
-
     $.each(this.enableQuestion, function() {
       if($(this).val() == preferences.enabledOption) {
         $(this).attr('checked', 'checked');
       }
     });
-
     this.timeQuestion.val(preferences.timeOption);
-
     $.each(this.closeQuestion, function() {
       if($(this).val() == preferences.closeOption) {
         $(this).attr('checked', 'checked');
@@ -47,7 +44,6 @@ var userPreferences = {
     if(preferences.walkOption == 'checked') {
       this.walkQuestion.prop('checked', 'checked');
     }
-
     if(preferences.enabledOption == 0) {
       userPreferences.disableQuestions(true);
     }
@@ -77,11 +73,8 @@ var userPreferences = {
       } else {
         localStorage.setItem('walk', 'not checked');
       }
-      
       updateStatus();
-      setTimeout(function() {
-        checkStatus();
-      }, 1000);
+      setTimeout(function() { checkStatus(); }, 1000);
     },
 
   validateTime: function() {
