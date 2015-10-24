@@ -2,7 +2,8 @@
   "name": "PostureMinder",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Reminds you to correct your posture with a friendly pop-up at specified time intervals.",
+  "author": "Sheryl Lun",
+  "description": "Reminds you to sit up straight with pop-up notifications at specified time intervals.",
   "icons": { "128": "img/spine.png" },
   "permissions": [
     "background",
