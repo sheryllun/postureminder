@@ -19,6 +19,7 @@ app.reminder = {
       userPreferences.init(15);
     }
     if(localStorage.firstRun === 'done') {
+      chrome.extension.getBackgroundPage().console.log('prog returned');
       return;
       } else {
       app.reminder.run();
@@ -28,6 +29,7 @@ app.reminder = {
   run: function() {
     var prefs = userPreferences.getPreferences();
     var time = prefs.timeOption;
+    chrome.extension.getBackgroundPage().console.log('reminder.run');
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
     if(prefs.enabledOption == 0) {
@@ -185,6 +187,16 @@ $('#submit').click(function(e) {
 
 app.init();
 
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
+  chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
+  app.reminder.run();
+});
+
 chrome.runtime.onStartup.addListener(function() {
+  chrome.alarms.onAlarm.addListener(app.reminder.walkListener);
+  chrome.alarms.onAlarm.addListener(app.reminder.sitListener);
   app.reminder.run();
 });
