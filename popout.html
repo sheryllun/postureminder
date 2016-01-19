@@ -77,7 +77,7 @@
       margin-bottom: 10px;
     }
 
-    #time {
+    input[type="number"] {
       width: 50px;
     }
 
@@ -125,37 +125,40 @@
     </header>
     <hr>
     <div id="notification">Reminders are currently <strong>enabled</strong>.</div>
-    <div class="options">
-      <h2>Options</h2>
-      <form>
+    <form>
+      <div class="options">
+        <h2>Options</h2>
         <ul>
           <li class="primary">
             <label for="default">Enable/Disable Reminders: <span class="remark">Disabling reminders disables the entire application.</span></label>
-            <input type="radio" name="default" value="1">Enable<br>
-            <input type="radio" name="default" value="0">Disable
-          </li>
-
-          <li>
-            <label for="time">Time between reminders:</label>
-            <input type="number" name="time" id="time" maxlength="3"> minutes
-            <div class="settime error">Please enter a number between 1 and 59. Options not saved.</div>
+            <input type="checkbox" name="default" id="default"> Enable
           </li>
 
           <li>
             <label for="close">Closing Reminders:</label>
-            <input type="radio" name="close" value="1"><span class="timedesc">Timed Close: Reminders will fade after 20 seconds.</span><br>
+            <input type="radio" name="close" value="1"><span class="timedesc">Timed Close: Reminders will fade after a certain time.</span><br>
             <input type="radio" name="close" value="2"><span class="timedesc">Click Close: Reminders will stay on screen until user clicks on it.</span>
           </li>
 
           <li>
-           <label for="walk"> Walk Around Reminders: <span class="remark">An additional reminder will pop up every 60 minutes reminding you to get up and walk around.</span></label>
+           <label for="walk">Walk Around Reminders: <span class="remark">An additional reminder will pop up will remind you to get up and walk around.</span></label>
             <input type="checkbox" name="walk" id="walk"> Enable
+          </li>
+        </ul>
+
+        <h2>Timing Settings</h2>
+        <ul>
+          <li>
+            <label for="time">Posture reminders:</label><input type="number" name="time" id="time" maxlength="3"> minutes
+            <label for="walkTime">Walking reminders:</label><input type="number" name="walkTime" id="walkTime" maxlength="3"> minutes
+            <label for="fadeTime">Reminder fading time:</label><input type="number" name="fadeTime" id="fadeTime" maxlength="3"> seconds
+            <div class="settime error">Please enter a number between 1 and 59. Options not saved.</div>
           </li>
         </ul>
         <input type="submit" value="Update" id="submit">
         <div class="savemsg error">Click update to save changes.</div>
-      </form>
-    </div>
+      </div>
+    </form>
   </body>
 
   <script type="text/javascript" src="/js/options.js"></script>
