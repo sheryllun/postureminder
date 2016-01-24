@@ -37,18 +37,17 @@ var userPreferences = {
 
   loadDom: function() {
     var preferences = this.getPreferences();
-    $.each(this.enableQuestion, function() {
-      if($(this).val() == preferences.enabledOption) {
-        $(this).attr('checked', 'checked');
-      }
-    });
+    if(preferences.enabledOption === 'checked') {
+      this.enableQuestion.prop('checked', 'checked')
+    }
     this.timeQuestion.val(preferences.timeOption);
+    this.walkTimeQuestion.val(preferences.walkTimeOption);
+    this.fadeTimeQuestion.val(preferences.fadeTimeOption);
     $.each(this.closeQuestion, function() {
       if($(this).val() == preferences.closeOption) {
         $(this).attr('checked', 'checked');
       }
     });
-
     if(preferences.walkOption == 'checked') {
       this.walkQuestion.prop('checked', 'checked');
     }

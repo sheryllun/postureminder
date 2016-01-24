@@ -38,15 +38,15 @@ app.reminder = {
     }
    // enable walk reminder
     if(prefs.walkOption == 'checked') {
-      this.timedWalkReminder();
+      this.timedWalkReminder(prefs.walkTimeOption);
     } else {
       chrome.alarms.clear('walk');
     }
   },
-  timedWalkReminder: function() {
+  timedWalkReminder: function(time) {
     chrome.alarms.create('walk', {
-      delayInMinutes: parseInt(prefs.walkTimeOption),
-      periodInMinutes: parseInt(prefs.walkTimeOption)
+      delayInMinutes: parseInt(time),
+      periodInMinutes: parseInt(time)
     });
   },
   timedReminder: function(time) {
@@ -158,7 +158,7 @@ app.reminder = {
     if(prefs.closeOption == 1) {
       setTimeout(function() {
         walkNotification.close();
-      }, 20000);
+      }, parseInt(prefs.fadeTimeOption) * 1000);
     }
   }
 };
