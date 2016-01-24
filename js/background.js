@@ -1,3 +1,4 @@
+localStorage.clear();
 var app = {};
 
 app.global = {
@@ -166,7 +167,7 @@ app.reminder = {
 //if user decides to disable reminders, disable all other options
 $('input[name="default"]').mouseup(function() {
   var bool = false;
-  if($('input[name="default"]').prop('checked')) {
+  if($(this).prop('checked')) {
     bool = true;
   } 
   userPreferences.disableQuestions(bool);
@@ -182,6 +183,14 @@ $('#submit').click(function(e) {
     userPreferences.save();
     app.reminder.run();
   }
+});
+
+$('#walk').change(function() {
+  $('#walkTime').prop('disabled', !this.checked);
+});
+
+$('input[name="close"]').change(function() {
+  $('#fadeTime').prop('disabled', $(this).val() != 1);
 });
 
 app.init();
