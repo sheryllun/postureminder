@@ -1,4 +1,3 @@
-localStorage.clear();
 var app = {};
 
 app.global = {
