@@ -174,7 +174,7 @@ $('input[name="default"]').mouseup(function() {
 });
 
 $('#submit').click(function(e) {
-  e.preventDefault();
+    e.preventDefault();
   $('.savemsg').hide();
   if(userPreferences.validateTime() === false) {
     return;

@@ -92,10 +92,30 @@ var userPreferences = {
 
   validateTime: function() {
     $('.settime').hide();
-    var enteredTime = this.timeQuestion.val();
-    if(!enteredTime.match(/\d/) || enteredTime <= 0 || enteredTime > 59) {
+    $('input').removeClass('error-highlight');
+    var postureTimeVal = this.timeQuestion.val();
+    var fadeTimeVal = this.fadeTimeQuestion.val();
+    var walkTimeVal = this.walkTimeQuestion.val();
+    var validation = true;
+
+    if(!postureTimeVal.match(/\d/) || postureTimeVal <= 0 || postureTimeVal > 59) {
+      this.timeQuestion.addClass('error-highlight');
+      validation = false;
+    } 
+    if(!fadeTimeVal.match(/\d/) || fadeTimeVal <= 0 || fadeTimeVal > 59) {
+      this.fadeTimeQuestion.addClass('error-highlight');
+      validation = false;
+    }
+     if(!walkTimeVal.match(/\d/) || walkTimeVal <= 0) {
+      this.walkTimeQuestion.addClass('error-highlight');
+      validation = false;
+    } 
+    
+    if(!validation) {
       $('.settime').show();
       return false;
+    } else {
+      return true;
     }
   }
 };
@@ -106,7 +126,7 @@ function updateStatus() {
 
 function checkStatus() {
   var currentStatus = localStorage.enabled;
-  if(currentStatus == 0) {
+  if(currentStatus == 'not checked') {
     $('#notification').html('Reminders are currently <strong>disabled</strong>');
   } else {
     $('#notification').html('Reminders are currently <strong>enabled</strong>');
