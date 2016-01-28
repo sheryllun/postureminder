@@ -1,26 +1,35 @@
 var userPreferences = {
-  enableQuestion: $('input[name="default"]'),
-  timeQuestion: $('input[name="time"]'),
+  enableQuestion: $('#default'),
+  timeQuestion: $('#time'),
   closeQuestion: $('input[name="close"]'),
-  walkQuestion: $('input[name="walk"]'),
+  walkQuestion: $('#walk'),
+  walkTimeQuestion: $('#walkTime'),
+  fadeTimeQuestion: $('#fadeTime'),
 
-  init: function(time) {
-    localStorage.setItem('enabled', '1');
+  init: function(time, walkTime, fadeTime) {
+    localStorage.setItem('enabled', 'checked');
     localStorage.setItem('time', time);
+    localStorage.setItem('walkTime', walkTime);
+    localStorage.setItem('fadeTime', fadeTime);
     localStorage.setItem('close', '1');
     localStorage.setItem('walk', 'not checked');
     localStorage.setItem('saved', 'true');
 
-    this.enableQuestion.filter('[value="1"]').prop('checked', true);
+    this.enableQuestion.prop('checked', true);
     this.timeQuestion.val(time);
+    this.walkTimeQuestion.val(walkTime);
+    this.fadeTimeQuestion.val(fadeTime);
     this.closeQuestion.filter('[value="1"]').attr('checked', 'checked');
     this.walkQuestion.prop('checked', false);
+    this.walkTimeQuestion.prop('disabled', true);
   },
 
   getPreferences: function() {
     var allPrefs = {
       enabledOption: localStorage.enabled,
       timeOption: localStorage.time,
+      walkTimeOption: localStorage.walkTime,
+      fadeTimeOption: localStorage.fadeTime,
       closeOption: localStorage.close,
       walkOption: localStorage.walk
     };
@@ -29,60 +38,84 @@ var userPreferences = {
 
   loadDom: function() {
     var preferences = this.getPreferences();
-    $.each(this.enableQuestion, function() {
-      if($(this).val() == preferences.enabledOption) {
-        $(this).attr('checked', 'checked');
-      }
-    });
+    if(preferences.enabledOption === 'checked') {
+      this.enableQuestion.prop('checked', 'checked')
+    } else {
+      userPreferences.disableQuestions(true);
+    }
     this.timeQuestion.val(preferences.timeOption);
+    this.walkTimeQuestion.val(preferences.walkTimeOption);
+    this.fadeTimeQuestion.val(preferences.fadeTimeOption);
     $.each(this.closeQuestion, function() {
       if($(this).val() == preferences.closeOption) {
         $(this).attr('checked', 'checked');
       }
     });
-
+    
+    this.walkTimeQuestion.prop('disabled', preferences.walkOption != 'checked');
+    this.fadeTimeQuestion.prop('disabled', preferences.closeOption != 1);
     if(preferences.walkOption == 'checked') {
       this.walkQuestion.prop('checked', 'checked');
-    }
-    if(preferences.enabledOption == 0) {
-      userPreferences.disableQuestions(true);
     }
   },
 
   disableQuestions: function(bool) {
-    if(bool === true) {
-      $('input[name="time"]').prop('disabled', true);
-      $('input[name="close"]').prop('disabled', true);
-      $('input[name="walk"]').prop('disabled', true);
-      $('li:not(.primary)').addClass('gray');
-    } else {
-      $('input[name="time"]').prop('disabled', false);
-      $('input[name="close"]').prop('disabled', false);
-      $('input[name="walk"]').prop('disabled', false);
-      $('li:not(.primary)').removeClass('gray');
-    }
+      this.timeQuestion.prop('disabled', bool);
+      this.closeQuestion.prop('disabled', bool);
+      this.walkQuestion.prop('disabled', bool);
+      this.walkTimeQuestion.prop('disabled', bool);
+      this.fadeTimeQuestion.prop('disabled', bool);
+      $('li:not(.primary)').toggleClass('gray', bool);
   },
 
   save: function() {
-      localStorage.setItem('enabled', $('input[name="default"]:checked').val());
-      localStorage.setItem('time', $('input[name="time"]').val());
+      localStorage.setItem('time', this.timeQuestion.val());
+      localStorage.setItem('walkTime', this.walkTimeQuestion.val());
+      localStorage.setItem('fadeTime', this.fadeTimeQuestion.val());
       localStorage.setItem('close', $('input[name="close"]:checked').val());
 
-      if($('#walk').is(':checked')) {
+      if(this.enableQuestion.is(':checked')) {
+        localStorage.setItem('enabled', 'checked');
+      } else {
+        localStorage.setItem('enabled', 'not checked');
+      }
+
+      if(this.walkQuestion.is(':checked')) {
         localStorage.setItem('walk', 'checked');
       } else {
         localStorage.setItem('walk', 'not checked');
       }
+
       updateStatus();
       setTimeout(function() { checkStatus(); }, 1000);
     },
 
   validateTime: function() {
     $('.settime').hide();
-    var enteredTime = $('#time').val();
-    if(!enteredTime.match(/\d/) || enteredTime <= 0 || enteredTime > 59) {
+    $('input').removeClass('error-highlight');
+    var postureTimeVal = this.timeQuestion.val();
+    var fadeTimeVal = this.fadeTimeQuestion.val();
+    var walkTimeVal = this.walkTimeQuestion.val();
+    var validation = true;
+
+    if(!postureTimeVal.match(/\d/) || postureTimeVal <= 0 || postureTimeVal > 59) {
+      this.timeQuestion.addClass('error-highlight');
+      validation = false;
+    } 
+    if(!fadeTimeVal.match(/\d/) || fadeTimeVal <= 0 || fadeTimeVal > 59) {
+      this.fadeTimeQuestion.addClass('error-highlight');
+      validation = false;
+    }
+     if(!walkTimeVal.match(/\d/) || walkTimeVal <= 0) {
+      this.walkTimeQuestion.addClass('error-highlight');
+      validation = false;
+    } 
+    
+    if(!validation) {
       $('.settime').show();
       return false;
+    } else {
+      return true;
     }
   }
 };
@@ -93,7 +126,7 @@ function updateStatus() {
 
 function checkStatus() {
   var currentStatus = localStorage.enabled;
-  if(currentStatus == 0) {
+  if(currentStatus == 'not checked') {
     $('#notification').html('Reminders are currently <strong>disabled</strong>');
   } else {
     $('#notification').html('Reminders are currently <strong>enabled</strong>');

@@ -16,7 +16,7 @@ app.reminder = {
       userPreferences.loadDom();
       checkStatus();
     } else {
-      userPreferences.init(15);
+      userPreferences.init(15, 60, 20);
     }
     if(localStorage.firstRun === 'done') {
       return;
@@ -30,7 +30,7 @@ app.reminder = {
     var time = prefs.timeOption;
     chrome.alarms.clearAll();
     //if reminders are disabled, turn it all off. 
-    if(prefs.enabledOption == 0) {
+    if(prefs.enabledOption != 'checked') {
       userPreferences.disableQuestions(true);
       return;
     } else {
@@ -38,15 +38,15 @@ app.reminder = {
     }
    // enable walk reminder
     if(prefs.walkOption == 'checked') {
-      this.timedWalkReminder();
+      this.timedWalkReminder(prefs.walkTimeOption);
     } else {
       chrome.alarms.clear('walk');
     }
   },
-  timedWalkReminder: function() {
+  timedWalkReminder: function(time) {
     chrome.alarms.create('walk', {
-      delayInMinutes: 61,
-      periodInMinutes: 61
+      delayInMinutes: parseInt(time),
+      periodInMinutes: parseInt(time)
     });
   },
   timedReminder: function(time) {
@@ -116,6 +116,7 @@ app.reminder = {
       var prefs = userPreferences.getPreferences();
       var title = 'Your PostureMinder';
       var messageBody = this.renderMessage();
+      var fadeTime = parseInt(prefs.fadeTimeOption) * 1000;
       if(Notification.permission === "granted") {
           var notification = new Notification(title, {
             body: messageBody,
@@ -125,7 +126,7 @@ app.reminder = {
           if(prefs.closeOption == 1) {
               setTimeout(function() {
                 notification.close();
-              }, 20000);
+              }, fadeTime);
             }
         } else if (Notification.permission !== 'denied') {
           Notification.requestPermission(function(permission){
@@ -137,7 +138,7 @@ app.reminder = {
               if(prefs.closeOption == 1) {
                   setTimeout(function() {
                     sitNotification.close();
-                  }, 20000);
+                  }, fadeTime);
                 }
               } else {
                 $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
@@ -157,7 +158,7 @@ app.reminder = {
     if(prefs.closeOption == 1) {
       setTimeout(function() {
         walkNotification.close();
-      }, 20000);
+      }, parseInt(prefs.fadeTimeOption) * 1000);
     }
   }
 };
@@ -165,7 +166,7 @@ app.reminder = {
 //if user decides to disable reminders, disable all other options
 $('input[name="default"]').mouseup(function() {
   var bool = false;
-  if($('input[name="default"]:checked').val() == 1) {
+  if($(this).prop('checked')) {
     bool = true;
   } 
   userPreferences.disableQuestions(bool);
@@ -173,7 +174,7 @@ $('input[name="default"]').mouseup(function() {
 });
 
 $('#submit').click(function(e) {
-  e.preventDefault();
+    e.preventDefault();
   $('.savemsg').hide();
   if(userPreferences.validateTime() === false) {
     return;
@@ -181,6 +182,14 @@ $('#submit').click(function(e) {
     userPreferences.save();
     app.reminder.run();
   }
+});
+
+$('#walk').change(function() {
+  $('#walkTime').prop('disabled', !this.checked);
+});
+
+$('input[name="close"]').change(function() {
+  $('#fadeTime').prop('disabled', $(this).val() != 1);
 });
 
 app.init();
