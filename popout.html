@@ -14,7 +14,7 @@
     }
 
     header {
-      width: 400px;
+      width: 300px;
       margin: 15px auto;
     }
 
@@ -36,7 +36,7 @@
     }
 
     #notification {
-      margin-top: 10px;
+      margin-top: 5px;
       font-size: 1.4em;
       padding: 5px;
       background: #B7EDE8;
@@ -45,7 +45,7 @@
     }
 
     .options {
-      padding: 2px 20px 20px;
+      padding: 0 20px 5px;
     }
 
     .options ul {
@@ -53,10 +53,11 @@
       list-style-type: none;
       font-size: 1.4em;
       padding: 0;
+      margin-top: 10px;
     }
 
     .options li {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .options label {
@@ -65,13 +66,21 @@
       margin-bottom: 5px;
     }
 
+    .options .time-label {
+      margin-top: 5px;
+    }
+
+    .options .fade-label, .options .fade-input {
+      margin-left: 25px;
+    }
+
     input[type="radio"] {
       width: 20px;
       display: inline-block;
     }
 
     .timedesc {
-      width: 300px;
+      width: 200px;
       display: inline-block;
       vertical-align: top;
       margin-bottom: 10px;
@@ -91,8 +100,12 @@
       font-style: italic;
     }
 
+    .error-highlight {
+      border: 1px solid red;
+    }
+
     .error {
-      margin-top: 3px;
+      margin-bottom:5px;
       display: none;
       color: red;
       font-size: 11px;
@@ -133,28 +146,28 @@
             <label for="default">Enable/Disable Reminders: <span class="remark">Disabling reminders disables the entire application.</span></label>
             <input type="checkbox" name="default" id="default"> Enable
           </li>
+          <li>
+             <label for="time" class="time-label">Show Posture Reminder every:</label><input type="number" name="time" id="time" min="1" max="59" maxlength="2"> minutes
+          </li>
+
+          <li>
+           <label for="walk">Walk Reminders: <span class="remark">An extra notification reminding you to get up.</span></label>
+            <input type="checkbox" name="walk" id="walk"> Enable
+            <label for="walkTime" class="time-label">Show Walk Reminder every:</label><input type="number" name="walkTime" id="walkTime" min="1" maxlength="3"> minutes
+          </li>
 
           <li>
             <label for="close">Closing Reminders:</label>
-            <input type="radio" name="close" value="1"><span class="timedesc">Timed Close: Reminders will fade after a certain time.</span><br>
-            <input type="radio" name="close" value="2"><span class="timedesc">Click Close: Reminders will stay on screen until user clicks on it.</span>
+            <input type="radio" name="close" value="2"><span class="timedesc">Click Close: Reminders will stay on screen until user clicks on it.</span><br />
+            <input type="radio" name="close" value="1"><span class="timedesc">Timed Close: Reminders will fade after user-determined time.</span><br>
+             <label class="fade-label" for="fadeTime">Hide reminders after:</label><input class="fade-input" type="number" name="fadeTime" min="1" max="59" id="fadeTime" maxlength="2"> seconds
           </li>
 
-          <li>
-           <label for="walk">Walk Around Reminders: <span class="remark">An additional reminder will pop up to remind you to get up and walk around.</span></label>
-            <input type="checkbox" name="walk" id="walk"> Enable
-          </li>
+         
         </ul>
 
-        <h2>Timing Settings</h2>
-        <ul>
-          <li>
-            <label for="time">Posture reminders:</label><input type="number" name="time" id="time" maxlength="3"> minutes
-            <label for="fadeTime">Reminder fading time:</label><input type="number" name="fadeTime" id="fadeTime" maxlength="3"> seconds
-            <label for="walkTime">Walking reminders:</label><input type="number" name="walkTime" id="walkTime" maxlength="3"> minutes
-            <div class="settime error">Please enter a number between 1 and 59. Options not saved.</div>
-          </li>
-        </ul>
+        <div class="settime error">Posture and Hide times must be between 1 and 59. Walk time must be greater than 0. Options not saved.</div>
+
         <input type="submit" value="Update" id="submit">
         <div class="savemsg error">Click update to save changes.</div>
       </div>
