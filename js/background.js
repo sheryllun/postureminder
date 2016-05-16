@@ -164,9 +164,11 @@ app.reminder = {
 };
 
 //if user decides to disable reminders, disable all other options
-$('input[name="default"]').mouseup(function() {
+$('input[name="default"]').click(function() {
+
   var bool = false;
-  if($(this).prop('checked')) {
+
+  if(!$(this).prop('checked')) {
     bool = true;
   } 
   userPreferences.disableQuestions(bool);
@@ -179,6 +181,7 @@ $('#submit').click(function(e) {
   if(userPreferences.validateTime() === false) {
     return;
   } else {
+
     userPreferences.save();
     app.reminder.run();
   }

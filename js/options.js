@@ -39,7 +39,7 @@ var userPreferences = {
   loadDom: function() {
     var preferences = this.getPreferences();
     if(preferences.enabledOption === 'checked') {
-      this.enableQuestion.prop('checked', 'checked')
+      this.enableQuestion.prop('checked', 'checked');
     } else {
       userPreferences.disableQuestions(true);
     }
