@@ -118,6 +118,9 @@ app.reminder = {
       var messageBody = this.renderMessage();
       var fadeTime = parseInt(prefs.fadeTimeOption) * 1000;
       if(Notification.permission === "granted") {
+          var notificationSound = new Audio('/../audio/notification.wav');
+	      notificationSound.play();
+		  
           var notification = new Notification(title, {
             body: messageBody,
             icon: 'img/spine.png',
