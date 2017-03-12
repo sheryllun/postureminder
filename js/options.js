@@ -5,6 +5,7 @@ var userPreferences = {
   walkQuestion: $('#walk'),
   walkTimeQuestion: $('#walkTime'),
   fadeTimeQuestion: $('#fadeTime'),
+  soundQuestion: $('#sound'),
 
   init: function(time, walkTime, fadeTime) {
     localStorage.setItem('enabled', 'checked');
@@ -14,6 +15,7 @@ var userPreferences = {
     localStorage.setItem('close', '1');
     localStorage.setItem('walk', 'not checked');
     localStorage.setItem('saved', 'true');
+    localStorage.setItem('sound', 'not checked');
 
     this.enableQuestion.prop('checked', true);
     this.timeQuestion.val(time);
@@ -31,7 +33,8 @@ var userPreferences = {
       walkTimeOption: localStorage.walkTime,
       fadeTimeOption: localStorage.fadeTime,
       closeOption: localStorage.close,
-      walkOption: localStorage.walk
+      walkOption: localStorage.walk,
+      soundOption: localStorage.sound
     };
     return allPrefs;
   },
@@ -57,12 +60,16 @@ var userPreferences = {
     if(preferences.walkOption == 'checked') {
       this.walkQuestion.prop('checked', 'checked');
     }
+    if(preferences.soundOption == 'checked') {
+      this.soundQuestion.prop('checked', 'checked');
+    }
   },
 
   disableQuestions: function(bool) {
       this.timeQuestion.prop('disabled', bool);
       this.closeQuestion.prop('disabled', bool);
       this.walkQuestion.prop('disabled', bool);
+      this.soundQuestion.prop('disabled', bool);
       this.walkTimeQuestion.prop('disabled', bool);
       this.fadeTimeQuestion.prop('disabled', bool);
       $('li:not(.primary)').toggleClass('gray', bool);
@@ -84,6 +91,12 @@ var userPreferences = {
         localStorage.setItem('walk', 'checked');
       } else {
         localStorage.setItem('walk', 'not checked');
+      }
+
+      if(this.soundQuestion.is(':checked')) {
+        localStorage.setItem('sound', 'checked');
+      } else {
+        localStorage.setItem('sound', 'not checked');
       }
 
       updateStatus();

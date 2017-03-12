@@ -3,7 +3,7 @@
   <style>
     body {
       font-family: 'Arial';
-      font-size: 62.5%;
+      font-size: 60%;
       text-align: center;
       margin: 0;
     }
@@ -33,10 +33,10 @@
       background-color: #D8D8D8;
       border: none;
       height: 1px;
+      margin-bottom: 0;
     }
 
     #notification {
-      margin-top: 5px;
       font-size: 1.4em;
       padding: 5px;
       background: #B7EDE8;
@@ -203,6 +203,10 @@
           </li>
           <li>
              <label for="time" class="time-label">Show Posture Reminder every:</label><input type="number" name="time" id="time" min="1" max="59" maxlength="2"> minutes
+          </li>
+
+          <li>
+            <label for="sound"><input type="checkbox" name="sound" id="sound">&nbsp;Sound: <span class="remark">Play a short tone each time.</span></label>
           </li>
 
           <li>

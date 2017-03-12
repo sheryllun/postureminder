@@ -117,12 +117,19 @@ app.reminder = {
       var title = 'Your PostureMinder';
       var messageBody = this.renderMessage();
       var fadeTime = parseInt(prefs.fadeTimeOption) * 1000;
+      var notificationSound = new Audio('/../audio/notification.mp3');
+
       if(Notification.permission === "granted") {
           var notification = new Notification(title, {
             body: messageBody,
             icon: 'img/spine.png',
             tag: 'Posture Reminder'
           });
+
+          if(prefs.soundOption === 'checked') {
+            notificationSound.play();
+          }
+          
           if(prefs.closeOption == 1) {
               setTimeout(function() {
                 notification.close();
@@ -165,7 +172,6 @@ app.reminder = {
 
 //if user decides to disable reminders, disable all other options
 $('input[name="default"]').click(function() {
-
   var bool = false;
 
   if(!$(this).prop('checked')) {
@@ -181,7 +187,6 @@ $('#submit').click(function(e) {
   if(userPreferences.validateTime() === false) {
     return;
   } else {
-
     userPreferences.save();
     app.reminder.run();
   }
@@ -197,6 +202,7 @@ $('input[name="close"]').change(function() {
 
 app.init();
 
+//Make sure event listeners are set after extension is added or updated
 chrome.runtime.onInstalled.addListener(function () {
   chrome.alarms.onAlarm.removeListener(app.reminder.walkListener);
   chrome.alarms.onAlarm.removeListener(app.reminder.sitListener);
