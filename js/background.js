@@ -114,59 +114,58 @@ app.reminder = {
     },
   displayMessage: function() {
       var prefs = userPreferences.getPreferences();
-      var title = 'Your PostureMinder';
-      var messageBody = this.renderMessage();
       var fadeTime = parseInt(prefs.fadeTimeOption) * 1000;
       var notificationSound = new Audio('/../audio/notification.mp3');
+      var opt = {
+        type: 'basic',
+        title: 'Your PostureMinder',
+        message: this.renderMessage(),
+        iconUrl: 'img/spine.png',
+        requireInteraction: false
+      };
 
-      if(Notification.permission === "granted") {
-          var notification = new Notification(title, {
-            body: messageBody,
-            icon: 'img/spine.png',
-            tag: 'Posture Reminder'
-          });
-
-          if(prefs.soundOption === 'checked') {
-            notificationSound.play();
-          }
-          
-          if(prefs.closeOption == 1) {
-              setTimeout(function() {
-                notification.close();
-              }, fadeTime);
-            }
-        } else if (Notification.permission !== 'denied') {
-          Notification.requestPermission(function(permission){
-            if(permission === 'granted')  {
-              var sitNotification = new Notification(title, {
-                      body: messageBody,
-                      icon: 'img/spine.png'
-                    });
-              if(prefs.closeOption == 1) {
-                  setTimeout(function() {
-                    sitNotification.close();
-                  }, fadeTime);
-                }
+      chrome.notifications.getPermissionLevel(function(permission) {
+        if(permission === "granted") {
+            if(prefs.closeOption == 1) {
+                opt.requireInteraction = false;
+                setTimeout(function() {
+                  chrome.notifications.clear('sitNotification');
+                }, fadeTime);
               } else {
-                $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
-                return;
+                opt.requireInteraction = true;
               }
-         });
-       }
+
+              chrome.notifications.create('sitNotification', opt);
+              if(prefs.soundOption === 'checked') {
+                notificationSound.play();
+              }
+          } else {
+              $('#notification').text('Desktop notifications must be allowed in order for this extension to run.');
+              return false;
+            }
+      });
+
   },
   displayWalkMessage: function() {
     var prefs = userPreferences.getPreferences();
-    var title = 'Your Walk Reminder';
-    var walkNotification = new Notification(title, {
-      body: 'Time to get up and stretch! Take a break.',
-      icon: 'img/spine2.png',
-      tag: 'Walk Reminder'
-    });
+    var opt = {
+      type: 'basic',
+      title: 'Your Walk Reminder',
+      message: 'Time to get up and stretch! Take a break.',
+      iconUrl: 'img/spine2.png',
+      requireInteraction: false
+    };
+
     if(prefs.closeOption == 1) {
+      opt.requireInteraction = false;
       setTimeout(function() {
-        walkNotification.close();
+        chrome.notifications.clear(title);
       }, parseInt(prefs.fadeTimeOption) * 1000);
+    } else {
+      opt.requireInteraction = true;
     }
+
+    chrome.notifications.create(title, opt);
   }
 };
 
