@@ -159,13 +159,13 @@ app.reminder = {
     if(prefs.closeOption == 1) {
       opt.requireInteraction = false;
       setTimeout(function() {
-        chrome.notifications.clear(title);
+        chrome.notifications.clear('walkNotification');
       }, parseInt(prefs.fadeTimeOption) * 1000);
     } else {
       opt.requireInteraction = true;
     }
 
-    chrome.notifications.create(title, opt);
+    chrome.notifications.create('walkNotification', opt);
   }
 };
 
