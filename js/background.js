@@ -3,7 +3,17 @@ var app = {};
 app.global = {
   systemState1: 'active',
   systemState2: 'active',
+  firefoxCompat: false
 };
+
+/* Firefox does not implement getPermissionLevel, so return "granted" permissions by default */
+if (!('getPermissionLevel' in chrome.notifications)) {
+  chrome.notifications.getPermissionLevel = function(callback) {
+    callback("granted");
+  };
+
+  app.global.firefoxCompat = true;
+}
 
 app.init = function() { app.reminder.init(); };
 
@@ -124,6 +134,12 @@ app.reminder = {
         requireInteraction: false
       };
 
+      // remove property for compatibility with Firefox
+      if (app.global.firefoxCompat) {
+        delete opt.requireInteraction;
+        Object.freeze(opt);
+      }
+
       chrome.notifications.getPermissionLevel(function(permission) {
         if(permission === "granted") {
             if(prefs.closeOption == 1) {
@@ -155,6 +171,12 @@ app.reminder = {
       iconUrl: 'img/spine2.png',
       requireInteraction: false
     };
+
+    // remove property for compatibility with Firefox
+    if (app.global.firefoxCompat) {
+      delete opt.requireInteraction;
+      Object.freeze(opt);
+    }
 
     if(prefs.closeOption == 1) {
       opt.requireInteraction = false;
