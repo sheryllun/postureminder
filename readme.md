@@ -11,4 +11,4 @@ PostureMinder
 - **Walk reminders** In addition to sitting up straight, you should also step away from your device every once in a while.
 - **Snarkiness** Fun, snarky messages to keep you entertained.
 
-**Download it on the [Chrome Web Store] (https://chrome.google.com/webstore/detail/postureminder/dkmkfopiihabelocpelofchappjjnpkm?hl=en-US&gl=US).**
+**Download it on the [Chrome Web Store](https://chrome.google.com/webstore/detail/postureminder/dkmkfopiihabelocpelofchappjjnpkm?hl=en-US&gl=US).**

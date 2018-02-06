@@ -116,7 +116,7 @@ app.reminder = {
   },
   renderMessage: function() {
     var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, ', 'Dump the slump, ', 'Posture check, ', 'Improve your posture, ', 'No bent spines, ', 'Mind your posture, '],
-       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'soldier', 'chum.', 'mate.', 'friend.', 'comrade.', 'cuz.', 'homie.', 'rookie.', 'tenderfoot.', 'sidekick.'],
+       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'soldier', 'chum.', 'mate.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
        begInt = Math.floor(Math.random() * postureBeginning.length),
        endInt = Math.floor(Math.random() * postureEnd.length),
        fullMessage = postureBeginning[begInt] + postureEnd[endInt];
