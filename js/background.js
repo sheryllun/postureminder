@@ -115,13 +115,18 @@ app.reminder = {
     app.global.systemState1 = app.global.systemState2;
   },
   renderMessage: function() {
-    var postureBeginning =['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, ', 'Dump the slump, ', 'Posture check, ', 'Improve your posture, ', 'No bent spines, ', 'Mind your posture, '],
-       postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'soldier', 'chum.', 'mate.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
-       begInt = Math.floor(Math.random() * postureBeginning.length),
-       endInt = Math.floor(Math.random() * postureEnd.length),
-       fullMessage = postureBeginning[begInt] + postureEnd[endInt];
-      return fullMessage;
-    },
+    var prefs = userPreferences.getPreferences();
+    var fullMessage = "Time to check your posture!"
+    if (prefs.quipOption == 'checked') {
+      var postureBeginning = ['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, ', 'Dump the slump, ', 'Posture check, ', 'Improve your posture, ', 'No bent spines, ', 'Mind your posture, '],
+      postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'soldier', 'chum.', 'mate.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
+      begInt = Math.floor(Math.random() * postureBeginning.length),
+      endInt = Math.floor(Math.random() * postureEnd.length),
+      fullMessage = postureBeginning[begInt] + postureEnd[endInt];
+    }
+    console.log(fullMessage);
+    return fullMessage;
+  },
   displayMessage: function() {
       var prefs = userPreferences.getPreferences();
       var fadeTime = parseInt(prefs.fadeTimeOption) * 1000;
