@@ -208,10 +208,11 @@
 
           <li>
             <label for="sound"><input type="checkbox" name="sound" id="sound">&nbsp;Sound: <span class="remark">Play a short tone each time.</span></label>
+            <label for="snarkiness"><input type="checkbox" name="snarkiness" id="snarkiness">&nbsp;Snarkiness: <span class="remark">Fun, snarky messages to keep you entertained.</span></label>
           </li>
 
           <li>
-           <label for="walk">Walk Reminders: <span class="remark">An extra notification reminding you to get up.</span></label>
+            <label for="walk">Walk Reminders: <span class="remark">An extra notification reminding you to get up.</span></label>
             <input type="checkbox" name="walk" id="walk"> Enable
             <label for="walkTime" class="time-label">Show Walk Reminder every:</label><input type="number" name="walkTime" id="walkTime" min="1" maxlength="3"> minutes
           </li>
@@ -220,10 +221,8 @@
             <label for="close">Closing Reminders:</label>
             <input type="radio" name="close" value="2"><span class="timedesc">Click Close: Reminders will stay on screen until user clicks on it.</span><br />
             <input type="radio" name="close" value="1"><span class="timedesc">Timed Close: Reminders will fade after user-determined time.</span><br>
-             <label class="fade-label" for="fadeTime">Hide reminders after:</label><input class="fade-input" type="number" name="fadeTime" min="1" max="59" id="fadeTime" maxlength="2"> seconds
-          </li>
-
-         
+            <label class="fade-label" for="fadeTime">Hide reminders after:</label><input class="fade-input" type="number" name="fadeTime" min="1" max="59" id="fadeTime" maxlength="2"> seconds
+          </li>          
         </ul>
 
         <div class="settime error">Posture and Hide times must be between 1 and 59. Walk time must be greater than 0. Options not saved.</div>
