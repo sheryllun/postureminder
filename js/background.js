@@ -116,13 +116,18 @@ app.reminder = {
   },
   renderMessage: function() {
     var prefs = userPreferences.getPreferences();
-    var fullMessage = "Time to check your posturae!"
+    var fullMessage;
+    var messages = ['Straighten up', 'Shoulders back', 'Check your posture', 'Sit up straight', 'Check yourself', 'Stop slumping', 'Posture Reminder', 'Stop slouching', 'Posture check', 'Improve your posture', 'Mind your posture'];
+    
     if (prefs.snarkinessOption == 'checked') {
-      var postureBeginning = ['Straighten up, ', 'Shoulders back, ', 'How\'s your posture, ', 'Check your posture, ', 'Sit up straight, ', 'Check yourself, ', 'No hunchbacks, ', 'At attention, ', 'Stop slumping, ', 'Mother told you not to slouch, ', 'Sit up, ', 'Posture Reminder, ', 'Posture police, ', 'Stop slouching, ', 'Back straight, ', 'Dump the slump, ', 'Posture check, ', 'Improve your posture, ', 'No bent spines, ', 'Mind your posture, '],
-      postureEnd = ['young grasshopper.', 'buddy.', 'amigo.', 'Quasimodo.', 'boss.', 'partner.', 'chap.', 'pal.', 'soldier', 'chum.', 'mate.', 'friend.', 'comrade.', 'cuz.', 'homie.'],
-      begInt = Math.floor(Math.random() * postureBeginning.length),
-      endInt = Math.floor(Math.random() * postureEnd.length),
-      fullMessage = postureBeginning[begInt] + postureEnd[endInt];
+      var snarkyBeginning = messages.concat(['How\'s your posture', 'No hunchbacks', 'At attention', 'Mother told you not to slouch', 'Sit up', 'Posture police', 'Back straight', 'Dump the slump', 'No bent spines']);
+      snarkyEnd = ['young grasshopper', 'buddy', 'amigo', 'Quasimodo', 'boss', 'partner', 'chap', 'pal', 'soldier', 'chum', 'mate', 'friend', 'comrade', 'cuz', 'homie'],
+      begInt = Math.floor(Math.random() * snarkyBeginning.length),
+      endInt = Math.floor(Math.random() * snarkyEnd.length);
+      fullMessage = snarkyBeginning[begInt] + ", " + snarkyEnd[endInt] + ".";
+    } else {
+      var msgInt = Math.floor(Math.random() * messages.length);
+      fullMessage = messages[msgInt] + ".";
     }
     console.log(fullMessage);
     return fullMessage;
