@@ -124,10 +124,10 @@ app.reminder = {
       snarkyEnd = ['young grasshopper', 'buddy', 'amigo', 'Quasimodo', 'boss', 'partner', 'chap', 'pal', 'soldier', 'chum', 'mate', 'friend', 'comrade', 'cuz', 'homie'],
       begInt = Math.floor(Math.random() * snarkyBeginning.length),
       endInt = Math.floor(Math.random() * snarkyEnd.length);
-      fullMessage = snarkyBeginning[begInt] + ", " + snarkyEnd[endInt] + ".";
+      fullMessage = `${snarkyBeginning[begInt]}, ${snarkyEnd[endInt]}.`;
     } else {
       var msgInt = Math.floor(Math.random() * messages.length);
-      fullMessage = messages[msgInt] + ".";
+      fullMessage = `${messages[msgInt]}.`;
     }
     console.log(fullMessage);
     return fullMessage;
