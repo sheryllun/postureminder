@@ -6,7 +6,7 @@ var userPreferences = {
   walkTimeQuestion: $('#walkTime'),
   fadeTimeQuestion: $('#fadeTime'),
   soundQuestion: $('#sound'),
-  quipQuestion: $('#quip'),
+  snarkinessQuestion: $('#snarkiness'),
 
   init: function(time, walkTime, fadeTime) {
     localStorage.setItem('enabled', 'checked');
@@ -25,7 +25,7 @@ var userPreferences = {
     this.closeQuestion.filter('[value="1"]').attr('checked', 'checked');
     this.walkQuestion.prop('checked', false);
     this.walkTimeQuestion.prop('disabled', true);
-    this.quipQuestion.prop('disabled', true);
+    this.snarkinessQuestion.prop('disabled', true);
   },
 
   getPreferences: function() {
@@ -37,7 +37,7 @@ var userPreferences = {
       closeOption: localStorage.close,
       walkOption: localStorage.walk,
       soundOption: localStorage.sound,
-      quipOption: localStorage.quip
+      snarkinessOption: localStorage.snarkiness
     };
     return allPrefs;
   },
@@ -66,8 +66,8 @@ var userPreferences = {
     if(preferences.soundOption == 'checked') {
       this.soundQuestion.prop('checked', 'checked');
     }
-    if(preferences.quipOption == 'checked') {
-      this.quipQuestion.prop('checked', 'checked');
+    if(preferences.snarkinessOption == 'checked') {
+      this.snarkinessQuestion.prop('checked', 'checked');
     }
   },
 
@@ -79,7 +79,7 @@ var userPreferences = {
       this.walkTimeQuestion.prop('disabled', bool);
       this.fadeTimeQuestion.prop('disabled', bool);
       $('li:not(.primary)').toggleClass('gray', bool);
-      this.quipQuestion.prop('disabled', bool);
+      this.snarkinessQuestion.prop('disabled', bool);
   },
 
   save: function() {
@@ -106,10 +106,10 @@ var userPreferences = {
         localStorage.setItem('sound', 'not checked');
       }
       
-      if(this.quipQuestion.is(':checked')) {
-        localStorage.setItem('quip', 'checked');
+      if(this.snarkinessQuestion.is(':checked')) {
+        localStorage.setItem('snarkiness', 'checked');
       } else {
-        localStorage.setItem('quip', 'not checked');
+        localStorage.setItem('snarkiness', 'not checked');
       }
 
       updateStatus();
