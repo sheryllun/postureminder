@@ -6,6 +6,7 @@ var userPreferences = {
   walkTimeQuestion: $('#walkTime'),
   fadeTimeQuestion: $('#fadeTime'),
   soundQuestion: $('#sound'),
+  snarkinessQuestion: $('#snarkiness'),
 
   init: function(time, walkTime, fadeTime) {
     localStorage.setItem('enabled', 'checked');
@@ -24,6 +25,7 @@ var userPreferences = {
     this.closeQuestion.filter('[value="1"]').attr('checked', 'checked');
     this.walkQuestion.prop('checked', false);
     this.walkTimeQuestion.prop('disabled', true);
+    this.snarkinessQuestion.prop('disabled', true);
   },
 
   getPreferences: function() {
@@ -34,7 +36,8 @@ var userPreferences = {
       fadeTimeOption: localStorage.fadeTime,
       closeOption: localStorage.close,
       walkOption: localStorage.walk,
-      soundOption: localStorage.sound
+      soundOption: localStorage.sound,
+      snarkinessOption: localStorage.snarkiness
     };
     return allPrefs;
   },
@@ -63,6 +66,9 @@ var userPreferences = {
     if(preferences.soundOption == 'checked') {
       this.soundQuestion.prop('checked', 'checked');
     }
+    if(preferences.snarkinessOption == 'checked') {
+      this.snarkinessQuestion.prop('checked', 'checked');
+    }
   },
 
   disableQuestions: function(bool) {
@@ -73,6 +79,7 @@ var userPreferences = {
       this.walkTimeQuestion.prop('disabled', bool);
       this.fadeTimeQuestion.prop('disabled', bool);
       $('li:not(.primary)').toggleClass('gray', bool);
+      this.snarkinessQuestion.prop('disabled', bool);
   },
 
   save: function() {
@@ -97,6 +104,12 @@ var userPreferences = {
         localStorage.setItem('sound', 'checked');
       } else {
         localStorage.setItem('sound', 'not checked');
+      }
+      
+      if(this.snarkinessQuestion.is(':checked')) {
+        localStorage.setItem('snarkiness', 'checked');
+      } else {
+        localStorage.setItem('snarkiness', 'not checked');
       }
 
       updateStatus();
