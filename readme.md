@@ -1,3 +1,6 @@
+# Deprecated
+This version of PostureMinder uses Manifest v2 which is no longer supported by Chrome.
+
 PostureMinder
 -----
 ### Sit up straight.
